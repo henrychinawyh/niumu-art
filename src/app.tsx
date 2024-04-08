@@ -5,6 +5,7 @@ import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
+import { deleteEmptyKey } from './utils';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -56,7 +57,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       // src: initialState?.currentUser?.avatar,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
-        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+        return <AvatarDropdown initialState={initialState}>{avatarChildren}</AvatarDropdown>;
       },
     },
     waterMarkProps: {
@@ -81,14 +82,12 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
-        <>
-          <PageContainer
-            header={{
-              title: null,
-            }}
-          >
-            {children}
-          </PageContainer>
+        <PageContainer
+          header={{
+            title: null,
+          }}
+        >
+          {children}
 
           {/* {isDev && (
             <SettingDrawer
@@ -103,7 +102,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               }}
             />
           )} */}
-        </>
+        </PageContainer>
       );
     },
     ...initialState?.settings,
@@ -117,4 +116,32 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  */
 export const request = {
   ...errorConfig,
+  requestInterceptors: [
+    (url: string, options: any) => {
+      const { data = {}, ...rest } = options || {};
+
+      return {
+        url,
+        options: {
+          ...rest,
+          data: deleteEmptyKey(data),
+        },
+      };
+    },
+  ],
+  responseInterceptors: [
+    (response: any) => {
+      const { data, status } = response || {};
+
+      const { data: responseData } = data;
+      const { message } = responseData || {};
+
+      if (status !== 200) {
+        message.error(message);
+        return response;
+      }
+
+      return response;
+    },
+  ],
 };
