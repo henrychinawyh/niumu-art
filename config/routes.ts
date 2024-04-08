@@ -35,6 +35,61 @@ export default [
     ],
   },
   {
+    path: '/family',
+    name: '家庭管理',
+    routes: [
+      {
+        name: '家庭表',
+        path: '/family/familyList',
+        component: './Family/FamilyList',
+      },
+    ],
+  },
+  {
+    path: '/course',
+    name: '课程管理',
+    routes: [
+      {
+        name: '课程列表',
+        path: '/course/courseList',
+        component: './Course/CourseList',
+      },
+      // {
+      //   name: '课程课销',
+      //   path: '/course/courseRemainConsume',
+      //   component: './Course/CourseRemainConsume',
+      // },
+    ],
+  },
+  {
+    path: '/teacher',
+    name: '教师管理',
+    routes: [
+      {
+        name: '教师表',
+        path: '/teacher/teacherList',
+        component: './Teacher/TeacherList',
+      },
+    ],
+  },
+
+  {
+    path: '/classes',
+    name: '班级管理',
+    routes: [
+      {
+        name: '班级列表',
+        path: '/classes/classesList',
+        component: './Classes/ClassesList',
+      },
+      {
+        name: '班级考勤',
+        path: '/classes/attendance',
+        component: './Classes/Attendance',
+      },
+    ],
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',

@@ -40,6 +40,11 @@ export const errorConfig: RequestConfig = {
     },
     // 错误接收及处理
     errorHandler: (error: any, opts: any) => {
+      if (error?.response?.status === 500) {
+        message.error(error?.response?.data?.message);
+        return;
+      }
+
       if (opts?.skipErrorHandler) throw error;
       // 我们的 errorThrower 抛出的错误。
       if (error.name === 'BizError') {

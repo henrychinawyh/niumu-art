@@ -2,6 +2,10 @@
 /* eslint-disable */
 
 declare namespace API {
+  type ApiParams = {
+    [key: string]: any;
+  };
+
   type CurrentUser = {
     name?: string;
     avatar?: string;
