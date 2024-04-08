@@ -1,7 +1,6 @@
-import { AvatarDropdown, AvatarName, Footer, Question, SelectLang } from '@/components';
+import { AvatarDropdown, AvatarName } from '@/components';
 import { queryCurrentUser } from '@/services/ant-design-pro/api';
-import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { ProBreadcrumb } from '@ant-design/pro-components';
+import { PageContainer, type Settings as LayoutSettings } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
@@ -49,9 +48,12 @@ export async function getInitialState(): Promise<{
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
+    actionsRender: () => [
+      // <Question key="doc" />,
+      // <SelectLang key="SelectLang" />
+    ],
     avatarProps: {
-      src: initialState?.currentUser?.avatar,
+      // src: initialState?.currentUser?.avatar,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
@@ -60,7 +62,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     waterMarkProps: {
       content: initialState?.currentUser?.name,
     },
-    footerRender: () => <Footer />,
+    // footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
@@ -80,13 +82,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       // if (initialState?.loading) return <PageLoading />;
       return (
         <>
-          <ProBreadcrumb
-            style={{
-              marginBottom: 15,
+          <PageContainer
+            header={{
+              title: null,
             }}
-          />
-
-          {children}
+          >
+            {children}
+          </PageContainer>
 
           {/* {isDev && (
             <SettingDrawer
