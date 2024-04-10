@@ -1,4 +1,5 @@
 import { getBirthdayByIdCard } from '@/utils/birthday';
+import { getDateString } from '@/utils/date';
 import {
   ModalForm,
   ProFormDatePicker,
@@ -43,6 +44,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       initialValues={{
         ...data,
         sex: data?.sex || 1,
+        birthDate: data?.birthDate ? getDateString(data?.birthDate) : getDateString(),
       }}
       onFinish={async (values) => {
         const params: FormSubmitProps = {

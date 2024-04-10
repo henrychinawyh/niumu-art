@@ -8,4 +8,5 @@ export interface TableListItemProps {
   status: int;
   createTs: string;
   updateTs: string;
+  [keys: string]: any;
 }

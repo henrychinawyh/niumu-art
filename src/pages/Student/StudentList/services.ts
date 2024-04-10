@@ -5,7 +5,10 @@ import { TableListItemProps } from './interface';
 export async function getStudentList(params: API.ApiParams & API.PageParams) {
   return request('/api/students/getStudentList', {
     method: 'POST',
-    params,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
   });
 }
 
@@ -24,14 +27,43 @@ export async function createStudent(params: Partial<TableListItemProps>) {
 export async function editStudent(params: Partial<TableListItemProps>) {
   return request('/api/students/editStudent', {
     method: 'POST',
-    params,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
   });
 }
 
 // 删除学员
-export async function deleteStudent(params: string[] | string) {
+export async function deleteStudent(params: any) {
   return request('/api/students/deleteStudent', {
     method: 'POST',
-    params,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 获取单个学员
+export async function getStudent(params: any) {
+  return request('/api/students/getStudent', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 导出学员
+export async function exportStudent(params: any) {
+  return request('/api/students/exportStudent', {
+    method: 'POST',
+    responseType: 'blob',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
   });
 }

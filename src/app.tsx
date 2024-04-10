@@ -5,6 +5,7 @@ import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
+import { deleteEmptyKey } from './utils';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -111,4 +112,32 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  */
 export const request = {
   ...errorConfig,
+  requestInterceptors: [
+    (url: string, options: any) => {
+      const { data = {}, ...rest } = options || {};
+
+      return {
+        url,
+        options: {
+          ...rest,
+          data: deleteEmptyKey(data),
+        },
+      };
+    },
+  ],
+  responseInterceptors: [
+    (response: any) => {
+      const { data, status } = response || {};
+
+      const { data: responseData } = data;
+      const { message } = responseData || {};
+
+      if (status !== 200) {
+        message.error(message);
+        return response;
+      }
+
+      return response;
+    },
+  ],
 };

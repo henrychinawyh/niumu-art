@@ -7,5 +7,4 @@ export const getWholeDateString = (
   return moment(date).format(format);
 };
 
-export const getDateString = (date: Moment | Date | string) =>
-  getWholeDateString(date, 'YYYY-MM-DD');
+export const getDateString = (date: any = moment()) => getWholeDateString(date, 'YYYY-MM-DD');
