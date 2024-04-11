@@ -6,9 +6,9 @@ import React, { useRef } from 'react';
 import CreateOrEdit from './components/createOrEdit';
 import { useInitColumns } from './field';
 import { TableListItemProps } from './interface';
-import { deleteStudent, exportStudent, getStudentList } from './services';
+import { deleteTeacher, exportTeacher, getTeacherList } from './services';
 
-const StudentList: React.FC = () => {
+const TeacherList: React.FC = () => {
   const tableRef = useRef<ActionType>();
   const formRef = useRef<ProFormInstance>();
 
@@ -24,7 +24,7 @@ const StudentList: React.FC = () => {
       setData(data);
     },
     (id: string) => {
-      delStudent(id);
+      delTeacher(id);
     },
   );
 
@@ -41,9 +41,9 @@ const StudentList: React.FC = () => {
     setSelectedRows([]);
   };
 
-  // 删除学员
-  const delStudent = async (ids: string | string[]) => {
-    const res = await deleteStudent({
+  // 删除教师
+  const delTeacher = async (ids: string | string[]) => {
+    const res = await deleteTeacher({
       ids,
     });
     if (res.code === '000') {
@@ -52,15 +52,15 @@ const StudentList: React.FC = () => {
     }
   };
 
-  // 导出学员
-  const exportStudents = async () => {
+  // 导出教师
+  const exportTeachers = async () => {
     const values = await formRef.current?.validateFields();
 
     message.loading('正在导出...', 0);
-    const res = await exportStudent(values);
+    const res = await exportTeacher(values);
     message.destroy();
 
-    downloadExcel(res, '学员列表.xlsx');
+    downloadExcel(res, '教师列表.xlsx');
   };
 
   return (
@@ -75,7 +75,7 @@ const StudentList: React.FC = () => {
         rowKey="id"
         request={async (params) => {
           resetKeysAndRows();
-          const res = await getStudentList(params);
+          const res = await getTeacherList(params);
 
           return {
             data: res.code === '000' ? res.data.list : [],
@@ -92,24 +92,24 @@ const StudentList: React.FC = () => {
             key="add"
             type="primary"
             onClick={() => {
-              setVisible(true);
               setType('create');
               setData(null);
+              setVisible(true);
             }}
           >
-            新增学员
+            新增教师
           </Button>,
           <Popconfirm
             key="batchDelete"
-            title="请确认是否要删除选中学员"
-            onConfirm={() => delStudent(selectedKeys)}
+            title="请确认是否要删除选中教师"
+            onConfirm={() => delTeacher(selectedKeys)}
           >
             <Button type="primary" danger disabled={!selectedRows.length}>
-              批量删除学员
+              批量删除教师
             </Button>
           </Popconfirm>,
-          <Button key="export" onClick={exportStudents}>
-            导出学员
+          <Button key="export" onClick={exportTeachers}>
+            导出教师
           </Button>,
         ]}
         options={false}
@@ -119,12 +119,11 @@ const StudentList: React.FC = () => {
 
       {visible && (
         <CreateOrEdit
-          title={type === 'create' ? '新增学员' : '编辑学员'}
+          title={type === 'create' ? '新增教师' : '编辑教师'}
           onCancel={(refresh?: boolean) => {
             if (refresh) {
               tableRef.current?.reload();
             }
-
             setData(null);
             setVisible(false);
           }}
@@ -137,4 +136,4 @@ const StudentList: React.FC = () => {
   );
 };
 
-export default StudentList;
+export default TeacherList;

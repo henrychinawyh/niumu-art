@@ -2,12 +2,12 @@ export interface TableListItemProps {
   id: number;
   birthDate: string;
   phoneNumber: string;
-  stuName: string;
+  teaName: string;
   idCard: string;
   sex: number;
-  status: int;
+  status: number;
+  age: number;
   createTs: string;
   updateTs: string;
-  age: number;
   [keys: string]: any;
 }

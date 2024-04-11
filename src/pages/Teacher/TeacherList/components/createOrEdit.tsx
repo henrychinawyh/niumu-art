@@ -9,7 +9,7 @@ import {
 import { Form, message } from 'antd';
 import React from 'react';
 import { TableListItemProps } from '../interface';
-import { createStudent, editStudent } from '../services';
+import { createTeacher, editTeacher } from '../services';
 
 type FormSubmitProps = Partial<
   Pick<TableListItemProps, 'idCard' | 'phoneNumber' | 'sex' | 'stuName' | 'birthDate' | 'id'>
@@ -24,8 +24,7 @@ interface IProps {
 }
 
 const CreateOrEdit: React.FC<IProps> = (props) => {
-  const { data = {}, title, visible, onCancel, type = 'create' } = props ?? {};
-
+  const { data, title, visible, onCancel, type = 'create' } = props ?? {};
   const [form] = Form.useForm<FormSubmitProps>();
 
   return (
@@ -52,15 +51,14 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
           idCard: values.idCard?.toUpperCase(),
         };
 
-        let fn = createStudent;
+        let fn = createTeacher;
         if (type === 'edit') {
           params.id = data?.id;
-          fn = editStudent;
+          fn = editTeacher;
         }
 
         try {
           const res = await fn(params);
-
           if (res) {
             message.success('提交成功');
             onCancel(true);
@@ -92,14 +90,14 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormText
-        label="学员姓名"
-        name="stuName"
+        label="教师姓名"
+        name="teaName"
         colProps={{ span: 12 }}
         rules={[
-          { required: true, message: '学员姓名必填' },
+          { required: true, message: '教师姓名必填' },
           {
             max: 10,
-            message: '学员姓名不能超过10个字符',
+            message: '教师姓名不能超过10个字符',
           },
         ]}
       />

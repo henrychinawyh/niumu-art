@@ -35,6 +35,17 @@ export default [
     ],
   },
   {
+    path: '/teacher',
+    name: '教师管理',
+    routes: [
+      {
+        name: '教师表',
+        path: '/teacher/teacherList',
+        component: './Teacher/TeacherList',
+      },
+    ],
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
