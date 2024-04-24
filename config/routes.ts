@@ -46,6 +46,17 @@ export default [
     ],
   },
   {
+    path: '/course',
+    name: '课程管理',
+    routes: [
+      {
+        name: '课程列表',
+        path: '/course/courseList',
+        component: './Course/CourseList',
+      },
+    ],
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
