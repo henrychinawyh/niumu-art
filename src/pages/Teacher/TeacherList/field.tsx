@@ -1,5 +1,6 @@
 import ReactCopyToClipBoard from '@/components/ReactCopyToClipBoard';
 import { getAllCourseList } from '@/pages/Course/CourseList/services';
+import { GENDER } from '@/utils/constant';
 import { getDateString, getWholeDateString } from '@/utils/date';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ProColumns } from '@ant-design/pro-components';
@@ -60,10 +61,7 @@ export const useInitColumns: any = (
     {
       title: '性别',
       dataIndex: 'sex',
-      valueEnum: {
-        1: '男',
-        2: '女',
-      },
+      valueEnum: GENDER,
       width: 60,
     },
     {
@@ -78,6 +76,9 @@ export const useInitColumns: any = (
       dataIndex: 'idCard',
       width: 95,
       render: (t: any) => (t ? <ReactCopyToClipBoard>{t}</ReactCopyToClipBoard> : '--'),
+      formItemProps: {
+        label: '身份证号',
+      },
     },
     {
       title: '状态',
@@ -87,7 +88,7 @@ export const useInitColumns: any = (
         99: '删除',
       },
       valueType: 'select',
-      initialValue: 1,
+      initialValue: '1',
       width: 100,
     },
     {

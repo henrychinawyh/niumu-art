@@ -1,0 +1,139 @@
+Date : 2024-06-12 11:46:12
+Directory : /Users/wangyuhang/Desktop/mypro/niumu-art/src
+Total : 73 files,  4359 codes, 262 comments, 485 blanks, all 5106 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| TypeScript JSX |         33 |      3,145 |        123 |        343 |      3,611 |
+| TypeScript     |         32 |      1,083 |        117 |        120 |      1,320 |
+| Less           |          6 |         72 |          0 |         14 |         86 |
+| JavaScript     |          1 |         37 |         22 |          7 |         66 |
+| JSON           |          1 |         22 |          0 |          1 |         23 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                  | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                     |         73 |      4,359 |        262 |        485 |      5,106 |
+| . (Files)                                                                                             |          8 |        400 |         90 |         42 |        532 |
+| components                                                                                            |          8 |        151 |         14 |         32 |        197 |
+| components (Files)                                                                                    |          1 |          4 |          7 |          2 |         13 |
+| components/Date                                                                                       |          2 |         21 |          3 |          7 |         31 |
+| components/Date/FormatDate                                                                            |          2 |         21 |          3 |          7 |         31 |
+| components/Footer                                                                                     |          1 |         33 |          0 |          3 |         36 |
+| components/HeaderDropdown                                                                             |          1 |         23 |          0 |          5 |         28 |
+| components/ReactCopyToClipBoard                                                                       |          1 |         30 |          3 |          6 |         39 |
+| components/RightContent                                                                               |          2 |         40 |          1 |          9 |         50 |
+| hooks                                                                                                 |          3 |         94 |          7 |         23 |        124 |
+| locales                                                                                               |          8 |        258 |          0 |          9 |        267 |
+| locales (Files)                                                                                       |          1 |         23 |          0 |          2 |         25 |
+| locales/zh-CN                                                                                         |          7 |        235 |          0 |          7 |        242 |
+| pages                                                                                                 |         37 |      3,182 |        108 |        336 |      3,626 |
+| pages (Files)                                                                                         |          2 |         52 |          0 |          7 |         59 |
+| pages/Classes                                                                                         |         13 |      1,039 |         40 |        118 |      1,197 |
+| pages/Classes/Attendance                                                                              |          5 |        270 |         11 |         36 |        317 |
+| pages/Classes/ClassesList                                                                             |          8 |        769 |         29 |         82 |        880 |
+| pages/Classes/ClassesList (Files)                                                                     |          5 |        328 |         16 |         32 |        376 |
+| pages/Classes/ClassesList/components                                                                  |          3 |        441 |         13 |         50 |        504 |
+| pages/Course                                                                                          |          8 |        682 |         28 |         79 |        789 |
+| pages/Course/CourseList                                                                               |          8 |        682 |         28 |         79 |        789 |
+| pages/Course/CourseList (Files)                                                                       |          5 |        449 |         22 |         47 |        518 |
+| pages/Course/CourseList/components                                                                    |          3 |        233 |          6 |         32 |        271 |
+| pages/Family                                                                                          |          1 |         29 |          3 |          5 |         37 |
+| pages/Student                                                                                         |          6 |        736 |         23 |         72 |        831 |
+| pages/Student/StudentList                                                                             |          6 |        736 |         23 |         72 |        831 |
+| pages/Student/StudentList (Files)                                                                     |          4 |        385 |         13 |         32 |        430 |
+| pages/Student/StudentList/components                                                                  |          2 |        351 |         10 |         40 |        401 |
+| pages/Teacher                                                                                         |          5 |        523 |         11 |         43 |        577 |
+| pages/Teacher/TeacherList                                                                             |          5 |        523 |         11 |         43 |        577 |
+| pages/Teacher/TeacherList (Files)                                                                     |          4 |        363 |         11 |         29 |        403 |
+| pages/Teacher/TeacherList/components                                                                  |          1 |        160 |          0 |         14 |        174 |
+| pages/User                                                                                            |          2 |        121 |          3 |         12 |        136 |
+| pages/User/Login                                                                                      |          2 |        121 |          3 |         12 |        136 |
+| services                                                                                              |          4 |        179 |         28 |         25 |        232 |
+| services/ant-design-pro                                                                               |          4 |        179 |         28 |         25 |        232 |
+| utils                                                                                                 |          5 |         95 |         15 |         18 |        128 |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                              | language       | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/access.ts                                               | TypeScript     |          6 |          3 |          1 |         10 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/app.tsx                                                 | TypeScript JSX |        106 |         32 |         10 |        148 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/Date/FormatDate/index.less                   | Less           |          0 |          0 |          1 |          1 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/Date/FormatDate/index.tsx                    | TypeScript JSX |         21 |          3 |          6 |         30 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/Footer/index.tsx                             | TypeScript JSX |         33 |          0 |          3 |         36 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/HeaderDropdown/index.tsx                     | TypeScript JSX |         23 |          0 |          5 |         28 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/ReactCopyToClipBoard/index.tsx               | TypeScript JSX |         30 |          3 |          6 |         39 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/RightContent/AvatarDropdown.tsx              | TypeScript JSX |         12 |          1 |          5 |         18 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/RightContent/index.tsx                       | TypeScript JSX |         28 |          0 |          4 |         32 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/components/index.ts                                     | TypeScript     |          4 |          7 |          2 |         13 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/global.less                                             | Less           |         47 |          0 |          7 |         54 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/global.tsx                                              | TypeScript JSX |         77 |          8 |          7 |         92 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/hooks/useConfirmHook.tsx                                | TypeScript JSX |         57 |          1 |          8 |         66 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/hooks/useCountDown.tsx                                  | TypeScript JSX |         25 |          3 |          9 |         37 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/hooks/useGetAllSubjects.tsx                             | TypeScript JSX |         12 |          3 |          6 |         21 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN.ts                                        | TypeScript     |         23 |          0 |          2 |         25 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN/component.ts                              | TypeScript     |          5 |          0 |          1 |          6 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN/globalHeader.ts                           | TypeScript     |         17 |          0 |          1 |         18 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN/menu.ts                                   | TypeScript     |         54 |          0 |          1 |         55 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN/pages.ts                                  | TypeScript     |         67 |          0 |          1 |         68 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN/pwa.ts                                    | TypeScript     |          6 |          0 |          1 |          7 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN/settingDrawer.ts                          | TypeScript     |         31 |          0 |          1 |         32 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/locales/zh-CN/settings.ts                               | TypeScript     |         55 |          0 |          1 |         56 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/manifest.json                                           | JSON           |         22 |          0 |          1 |         23 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/404.tsx                                           | TypeScript JSX |         16 |          0 |          3 |         19 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/Attendance/fields.tsx                     | TypeScript JSX |        159 |          5 |         16 |        180 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/Attendance/index.less                     | Less           |          0 |          0 |          1 |          1 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/Attendance/index.tsx                      | TypeScript JSX |         86 |          4 |         14 |        104 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/Attendance/interface.d.ts                 | TypeScript     |          5 |          0 |          1 |          6 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/Attendance/services.ts                    | TypeScript     |         20 |          2 |          4 |         26 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/components/addClassCourse.tsx | TypeScript JSX |         70 |          3 |         12 |         85 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/components/createOrEdit.tsx   | TypeScript JSX |        174 |          4 |         22 |        200 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/components/detail.tsx         | TypeScript JSX |        197 |          6 |         16 |        219 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/fields.tsx                    | TypeScript JSX |        111 |          1 |          5 |        117 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/index.less                    | Less           |          0 |          0 |          1 |          1 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/index.tsx                     | TypeScript JSX |        110 |          5 |         13 |        128 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/interface.d.ts                | TypeScript     |         31 |          0 |          3 |         34 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Classes/ClassesList/services.ts                   | TypeScript     |         76 |         10 |         10 |         96 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/components/addGrade.tsx         | TypeScript JSX |         67 |          3 |          8 |         78 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/components/createOrEdit.tsx     | TypeScript JSX |        110 |          0 |         14 |        124 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/components/editGradeName.tsx    | TypeScript JSX |         56 |          3 |         10 |         69 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/field.tsx                       | TypeScript JSX |         72 |          0 |          3 |         75 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/index.less                      | Less           |         11 |          0 |          1 |         12 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/index.tsx                       | TypeScript JSX |        258 |         12 |         29 |        299 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/interface.d.ts                  | TypeScript     |         15 |          0 |          2 |         17 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Course/CourseList/services.ts                     | TypeScript     |         93 |         10 |         12 |        115 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Family/services.ts                                | TypeScript     |         29 |          3 |          5 |         37 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Student/StudentList/components/createOrEdit.tsx   | TypeScript JSX |        231 |          4 |         25 |        260 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Student/StudentList/components/relateFamily.tsx   | TypeScript JSX |        120 |          6 |         15 |        141 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Student/StudentList/field.tsx                     | TypeScript JSX |        158 |          1 |          6 |        165 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Student/StudentList/index.tsx                     | TypeScript JSX |        150 |          6 |         18 |        174 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Student/StudentList/interface.d.ts                | TypeScript     |         20 |          0 |          1 |         21 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Student/StudentList/services.ts                   | TypeScript     |         57 |          6 |          7 |         70 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Teacher/TeacherList/components/createOrEdit.tsx   | TypeScript JSX |        160 |          0 |         14 |        174 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Teacher/TeacherList/field.tsx                     | TypeScript JSX |        149 |          0 |          5 |        154 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Teacher/TeacherList/index.tsx                     | TypeScript JSX |        124 |          3 |         13 |        140 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Teacher/TeacherList/interface.d.ts                | TypeScript     |         14 |          0 |          1 |         15 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Teacher/TeacherList/services.ts                   | TypeScript     |         76 |          8 |         10 |         94 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/User/Login/index.less                             | Less           |         14 |          0 |          3 |         17 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/User/Login/index.tsx                              | TypeScript JSX |        107 |          3 |          9 |        119 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/pages/Welcome.tsx                                       | TypeScript JSX |         36 |          0 |          4 |         40 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/requestErrorConfig.ts                                   | TypeScript     |         86 |         25 |          7 |        118 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/service-worker.js                                       | JavaScript     |         37 |         22 |          7 |         66 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/services/ant-design-pro/api.ts                          | TypeScript     |         72 |         13 |          9 |         94 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/services/ant-design-pro/index.ts                        | TypeScript     |          6 |          4 |          1 |         11 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/services/ant-design-pro/login.ts                        | TypeScript     |         15 |          4 |          2 |         21 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/services/ant-design-pro/typings.d.ts                    | TypeScript     |         86 |          7 |         13 |        106 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/typings.d.ts                                            | TypeScript     |         19 |          0 |          2 |         21 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/utils/birthday.ts                                       | TypeScript     |          5 |          0 |          1 |          6 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/utils/constant.ts                                       | TypeScript     |         10 |          2 |          2 |         14 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/utils/cookie.ts                                         | TypeScript     |          6 |          5 |          1 |         12 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/utils/date.ts                                           | TypeScript     |         15 |          3 |          5 |         23 |
+| /Users/wangyuhang/Desktop/mypro/niumu-art/src/utils/index.ts                                          | TypeScript     |         59 |          5 |          9 |         73 |
+| Total                                                                                                 |                |      4,359 |        262 |        485 |      5,106 |
++-------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

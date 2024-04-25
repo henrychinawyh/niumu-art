@@ -58,3 +58,36 @@ export async function exportTeacher(params: any) {
     data: params,
   });
 }
+
+// 根据选择的课程搜索教师
+export async function queryTeacherWithCourse(params: any) {
+  return request(`${prefix}/queryTeacherWithCourse`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 根据输入教师名称模糊搜索
+export async function queryTeacherByName(params: any) {
+  return request(`${prefix}/queryTeacherByName`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 根据班级id查询教师
+export async function getTeacherByClassId(params: any) {
+  return request(`${prefix}/getTeacherByClassId`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}

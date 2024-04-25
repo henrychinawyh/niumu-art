@@ -1,4 +1,12 @@
-import { ModalForm, ProForm, ProFormList, ProFormText } from '@ant-design/pro-components';
+import { convertObjectToArray } from '@/utils';
+import { TERM } from '@/utils/constant';
+import {
+  ModalForm,
+  ProForm,
+  ProFormList,
+  ProFormSelect,
+  ProFormText,
+} from '@ant-design/pro-components';
 import { Form, message } from 'antd';
 import React from 'react';
 import styles from '../index.less';
@@ -22,7 +30,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
 
   return (
     <ModalForm<FormSubmitProps>
-      width={500}
+      width={800}
       title={title}
       modalProps={{
         onCancel: () => {
@@ -35,9 +43,19 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       autoFocusFirstInput
       form={form}
       onFinish={async (values) => {
-        if (!values.grades?.length && type === 'create') {
+        if (type === 'create' && !values?.grades?.length) {
           message.error('请至少添加一个级别');
           return false;
+        }
+
+        if (
+          Array.isArray(values.grades) &&
+          Array.from(
+            new Set(values.grades.map((item: any) => `${item.courseSemester}-${item.name}`)),
+          )?.length < values.grades.length
+        ) {
+          message.error('级别名称不能重复');
+          return;
         }
 
         let fn = createCourse;
@@ -45,6 +63,11 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
           values.id = data?.id; // 课程id
           fn = editCourse;
         }
+
+        values.grades = values.grades?.filter(
+          (item: any) =>
+            item?.courseCount && item?.courseOriginPrice && item?.courseSemester && item?.name,
+        );
 
         try {
           const res = await fn(values);
@@ -76,7 +99,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
             },
           ]}
           colProps={{
-            span: 12,
+            span: 6,
           }}
         />
       </ProForm.Group>
@@ -94,8 +117,13 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
             copyIconProps={false}
           >
             <ProForm.Group key="courseNames">
+              <ProFormSelect
+                options={convertObjectToArray(TERM)}
+                name="courseSemester"
+                initialValue="1"
+                colProps={{ span: 4 }}
+              />
               <ProFormText
-                width="sm"
                 placeholder={'请输入级别名称'}
                 name="name"
                 labelCol={{ span: 0 }}
@@ -105,6 +133,33 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
                     message: '请输入级别名称',
                   },
                 ]}
+                colProps={{ span: 8 }}
+              />
+
+              <ProFormText
+                name="courseOriginPrice"
+                placeholder="请输入课程价格"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入课程价格',
+                  },
+                ]}
+                labelCol={{ span: 0 }}
+                colProps={{ span: 6 }}
+              />
+
+              <ProFormText
+                name="courseCount"
+                placeholder="请输入课程时数"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入课程时数',
+                  },
+                ]}
+                labelCol={{ span: 0 }}
+                colProps={{ span: 6 }}
               />
             </ProForm.Group>
           </ProFormList>

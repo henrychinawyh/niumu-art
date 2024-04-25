@@ -9,5 +9,14 @@ export interface TableListItemProps {
   createTs: string;
   updateTs: string;
   age: number;
+  hasCousin: string;
+  schoolName: string;
+  familyId: string;
+  isMain: number;
+  relateWay: string;
+  familyId: string;
+  familyName: string;
+  isMember: number;
+  discount: string;
   [keys: string]: any;
 }

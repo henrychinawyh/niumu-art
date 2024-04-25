@@ -69,6 +69,17 @@ export async function getCourseGrade(params: any) {
   });
 }
 
+// 新增课程级别
+export async function addCourseGrade(params: any) {
+  return request(`${prefix}/addCourseGrade`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
 // 删除课程级别
 export async function deleteGrade(params: any) {
   return request(`${prefix}/deleteCourseGrade`, {
@@ -83,6 +94,28 @@ export async function deleteGrade(params: any) {
 // 编辑课程级别
 export async function editCourseGrade(params: any) {
   return request(`${prefix}/editCourseGrade`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 查询所有的课程类目
+export async function getAllSubjects(params?: any) {
+  return request(`${prefix}/getAllSubjects`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 查询课程-季度-级别详细信息
+export async function getCourseDetail(params?: any) {
+  return request(`${prefix}/getCourseDetail`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

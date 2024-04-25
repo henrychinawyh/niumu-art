@@ -1,6 +1,6 @@
 import { AvatarDropdown, AvatarName } from '@/components';
 import { queryCurrentUser } from '@/services/ant-design-pro/api';
-import { type Settings as LayoutSettings } from '@ant-design/pro-components';
+import { PageContainer, type Settings as LayoutSettings } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
@@ -82,7 +82,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
-        <>
+        <PageContainer
+          header={{
+            title: null,
+          }}
+        >
           {children}
 
           {/* {isDev && (
@@ -98,7 +102,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               }}
             />
           )} */}
-        </>
+        </PageContainer>
       );
     },
     ...initialState?.settings,

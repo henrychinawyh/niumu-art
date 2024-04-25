@@ -35,13 +35,13 @@ export default [
     ],
   },
   {
-    path: '/teacher',
-    name: '教师管理',
+    path: '/family',
+    name: '家庭管理',
     routes: [
       {
-        name: '教师表',
-        path: '/teacher/teacherList',
-        component: './Teacher/TeacherList',
+        name: '家庭表',
+        path: '/family/familyList',
+        component: './Family/FamilyList',
       },
     ],
   },
@@ -54,8 +54,25 @@ export default [
         path: '/course/courseList',
         component: './Course/CourseList',
       },
+      // {
+      //   name: '课程课销',
+      //   path: '/course/courseRemainConsume',
+      //   component: './Course/CourseRemainConsume',
+      // },
     ],
   },
+  {
+    path: '/teacher',
+    name: '教师管理',
+    routes: [
+      {
+        name: '教师表',
+        path: '/teacher/teacherList',
+        component: './Teacher/TeacherList',
+      },
+    ],
+  },
+
   {
     path: '/classes',
     name: '班级管理',
@@ -64,6 +81,11 @@ export default [
         name: '班级列表',
         path: '/classes/classesList',
         component: './Classes/ClassesList',
+      },
+      {
+        name: '班级考勤',
+        path: '/classes/attendance',
+        component: './Classes/Attendance',
       },
     ],
   },

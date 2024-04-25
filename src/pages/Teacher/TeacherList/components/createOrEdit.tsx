@@ -1,4 +1,6 @@
+import { convertObjectToArray } from '@/utils';
 import { getBirthdayByIdCard } from '@/utils/birthday';
+import { GENDER } from '@/utils/constant';
 import { getAgeByBirth, getDateString } from '@/utils/date';
 import {
   ModalForm,
@@ -49,7 +51,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       form={form}
       initialValues={{
         ...data,
-        sex: data?.sex || 1,
+        sex: data?.sex ? `${data?.sex}` : undefined,
         birthDate: data?.birthDate ? getDateString(data?.birthDate) : undefined,
       }}
       onFinish={async (values) => {
@@ -135,11 +137,9 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         label="性别"
         name="sex"
         colProps={{ span: 12 }}
-        options={[
-          { label: '男', value: 1 },
-          { label: '女', value: 2 },
-        ]}
+        options={convertObjectToArray(GENDER)}
         radioType="button"
+        rules={[{ required: true, message: '性别必选' }]}
       />
 
       <ProFormText
