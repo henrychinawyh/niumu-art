@@ -1,3 +1,5 @@
+import { ProColumns } from '@ant-design/pro-components';
+
 // 将对象中属性值为空的key删除，避免后端接口报错
 export const deleteEmptyKey = (obj: any) => {
   Object.keys(obj).forEach((key) => {
@@ -33,4 +35,15 @@ export const downloadExcel = (data: any, fileName: string) => {
   link.click();
   document.body.removeChild(link); // 下载完成移除元素
   window.URL.revokeObjectURL(url); // 释放掉blob对象
+};
+
+// 算出columns中width的总和
+export const getTotalWidth = (columns: ProColumns<any>[]) => {
+  let total = 0;
+  columns.forEach((item: any, index) => {
+    if (index !== columns.length - 1) {
+      total += item.width;
+    }
+  });
+  return `${total}px`;
 };

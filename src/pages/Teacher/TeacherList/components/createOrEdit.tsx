@@ -1,18 +1,24 @@
 import { getBirthdayByIdCard } from '@/utils/birthday';
-import { getDateString } from '@/utils/date';
+import { getAgeByBirth, getDateString } from '@/utils/date';
 import {
   ModalForm,
   ProFormDatePicker,
   ProFormRadio,
+  ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
 import { Form, message } from 'antd';
+import { DefaultOptionType } from 'antd/es/select';
+import moment from 'moment';
 import React from 'react';
 import { TableListItemProps } from '../interface';
 import { createTeacher, editTeacher } from '../services';
 
 type FormSubmitProps = Partial<
-  Pick<TableListItemProps, 'idCard' | 'phoneNumber' | 'sex' | 'stuName' | 'birthDate' | 'id'>
+  Pick<
+    TableListItemProps,
+    'idCard' | 'phoneNumber' | 'sex' | 'stuName' | 'birthDate' | 'id' | 'age'
+  >
 >;
 
 interface IProps {
@@ -20,11 +26,12 @@ interface IProps {
   onCancel: (refresh?: boolean) => void;
   visible: boolean;
   type?: 'create' | 'edit';
+  options?: DefaultOptionType[];
   data?: Partial<TableListItemProps> | null;
 }
 
 const CreateOrEdit: React.FC<IProps> = (props) => {
-  const { data, title, visible, onCancel, type = 'create' } = props ?? {};
+  const { data, title, visible, onCancel, type = 'create', options } = props ?? {};
   const [form] = Form.useForm<FormSubmitProps>();
 
   return (
@@ -49,6 +56,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         const params: FormSubmitProps = {
           ...values,
           idCard: values.idCard?.toUpperCase(),
+          age: getAgeByBirth(moment(values?.birthDate)),
         };
 
         let fn = createTeacher;
@@ -100,6 +108,14 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
             message: '教师姓名不能超过10个字符',
           },
         ]}
+      />
+
+      <ProFormSelect
+        label="任职课程"
+        name="courseId"
+        colProps={{ span: 12 }}
+        options={options}
+        rules={[{ required: true, message: '任职课程必填' }]}
       />
 
       <ProFormText

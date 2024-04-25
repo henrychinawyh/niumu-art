@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { downloadExcel } from '@/utils';
+import { downloadExcel, getTotalWidth } from '@/utils';
 import { ActionType, PageContainer, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm, message } from 'antd';
 import React, { useRef } from 'react';
@@ -17,7 +17,7 @@ const TeacherList: React.FC = () => {
   const [visible, setVisible] = React.useState<boolean>(false);
   const [data, setData] = React.useState<Partial<TableListItemProps> | null>(null);
   const [type, setType] = React.useState<'create' | 'edit'>('create');
-  const columns = useInitColumns(
+  const [columns, courseOptions] = useInitColumns(
     (data: TableListItemProps) => {
       setVisible(true);
       setType('edit');
@@ -78,8 +78,8 @@ const TeacherList: React.FC = () => {
           const res = await getTeacherList(params);
 
           return {
-            data: res.code === '000' ? res.data.list : [],
-            total: res.code === '000' ? res.data.total : 0,
+            data: res.code === '000' ? res.data?.list : [],
+            total: res.code === '000' ? res.data?.total : 0,
             success: res.code === '000',
           };
         }}
@@ -87,6 +87,9 @@ const TeacherList: React.FC = () => {
           defaultPageSize: 10,
         }}
         columns={columns}
+        scroll={{
+          x: getTotalWidth(columns),
+        }}
         toolBarRender={() => [
           <Button
             key="add"
@@ -130,6 +133,7 @@ const TeacherList: React.FC = () => {
           visible={visible}
           data={data}
           type={type}
+          options={courseOptions}
         />
       )}
     </PageContainer>

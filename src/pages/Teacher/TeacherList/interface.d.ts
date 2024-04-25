@@ -1,5 +1,6 @@
 export interface TableListItemProps {
   id: number;
+  courseName: number;
   birthDate: string;
   phoneNumber: string;
   teaName: string;

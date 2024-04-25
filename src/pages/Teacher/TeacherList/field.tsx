@@ -1,25 +1,61 @@
+import ReactCopyToClipBoard from '@/components/ReactCopyToClipBoard';
+import { getAllCourseList } from '@/pages/Course/CourseList/services';
 import { getDateString, getWholeDateString } from '@/utils/date';
-import { Button, Popconfirm } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { ProColumns } from '@ant-design/pro-components';
+import { Button, Popconfirm, Space, Tooltip } from 'antd';
+import { useEffect, useState } from 'react';
 import { TableListItemProps } from './interface';
 
 export const useInitColumns: any = (
   editFn?: (data: TableListItemProps) => void,
   deleteFn?: (id: string) => void,
 ) => {
-  const columns = [
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    getAllCourseList({}).then((res) => {
+      setOptions(res.data);
+    });
+  }, []);
+
+  const columns: ProColumns<TableListItemProps>[] = [
     {
       title: '教师名称',
       dataIndex: 'teaName',
+      width: 80,
+    },
+    {
+      title: '任职课程',
+      dataIndex: 'courseName',
+      valueType: 'select',
+      formItemProps: {
+        name: 'courseId',
+      },
+      fieldProps: {
+        options,
+      },
+      width: 80,
     },
     {
       title: '年龄',
       dataIndex: 'age',
       hideInSearch: true,
+      width: 60,
     },
     {
-      title: '手机号',
+      title: (
+        <Space size={4}>
+          <span>手机号</span>
+          <Tooltip title="点击手机号可复制">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
       dataIndex: 'phoneNumber',
       hideInSearch: true,
+      width: 120,
+      render: (t: any) => (t ? <ReactCopyToClipBoard>{t}</ReactCopyToClipBoard> : '--'),
     },
     {
       title: '性别',
@@ -28,10 +64,20 @@ export const useInitColumns: any = (
         1: '男',
         2: '女',
       },
+      width: 60,
     },
     {
-      title: '身份证号',
+      title: (
+        <Space size={4}>
+          <span>身份证号</span>
+          <Tooltip title="点击身份证号可复制">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
       dataIndex: 'idCard',
+      width: 95,
+      render: (t: any) => (t ? <ReactCopyToClipBoard>{t}</ReactCopyToClipBoard> : '--'),
     },
     {
       title: '状态',
@@ -41,13 +87,15 @@ export const useInitColumns: any = (
         99: '删除',
       },
       valueType: 'select',
-      initialValue: '1',
+      initialValue: 1,
+      width: 100,
     },
     {
       title: '生日',
       dataIndex: 'birthDate',
       hideInSearch: true,
       render: (t: any) => (t ? getDateString(t) : ''),
+      width: 100,
     },
     {
       title: '创建时间',
@@ -56,6 +104,7 @@ export const useInitColumns: any = (
       hideInSearch: true,
       render: (dom: any, r: TableListItemProps) =>
         r.createTs ? getWholeDateString(r.createTs) : '--',
+      width: 100,
     },
     {
       title: '更新时间',
@@ -63,11 +112,13 @@ export const useInitColumns: any = (
       hideInSearch: true,
       render: (dom: any, r: TableListItemProps) =>
         r.updateTs ? getWholeDateString(r.updateTs) : '--',
+      width: 100,
     },
     {
       title: '操作',
       dataIndex: 'id',
       valueType: 'option',
+      fixed: 'right',
       render: (_: any, record: TableListItemProps) =>
         record.status === 99
           ? null
@@ -93,8 +144,9 @@ export const useInitColumns: any = (
                 </Button>
               </Popconfirm>,
             ],
+      width: 130,
     },
   ];
 
-  return columns;
+  return [columns, options];
 };
