@@ -40,10 +40,15 @@ export const downloadExcel = (data: any, fileName: string) => {
 // 算出columns中width的总和
 export const getTotalWidth = (columns: ProColumns<any>[]) => {
   let total = 0;
-  columns.forEach((item: any, index) => {
-    if (index !== columns.length - 1) {
-      total += item.width;
-    }
-  });
-  return `${total}px`;
+
+  if (Array.isArray(columns)) {
+    columns.forEach((item: any, index) => {
+      if (index !== columns.length - 1) {
+        total += item?.width;
+      }
+    });
+    return `${total}px`;
+  }
+
+  return true;
 };

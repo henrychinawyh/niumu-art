@@ -135,7 +135,7 @@ const CourseList: React.FC = () => {
                 columns={[
                   {
                     title: '级别名称',
-                    dataIndex: 'name',
+                    dataIndex: 'label',
                   },
                   {
                     title: '操作',
