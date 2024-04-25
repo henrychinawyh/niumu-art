@@ -13,6 +13,7 @@ const useCountDownConfirm = (count: number) => {
     return () => {
       if (instance) {
         (instance as any)?.destroy();
+        reset();
       }
     };
   }, []);

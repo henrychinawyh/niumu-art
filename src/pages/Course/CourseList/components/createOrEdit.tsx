@@ -35,7 +35,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       autoFocusFirstInput
       form={form}
       onFinish={async (values) => {
-        if (!values.grades?.length) {
+        if (!values.grades?.length && type === 'create') {
           message.error('请至少添加一个级别');
           return false;
         }
@@ -59,6 +59,9 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
 
         return true; // 在最后关闭弹框
       }}
+      initialValues={{
+        name: data?.name,
+      }}
       grid
     >
       <ProForm.Group>
@@ -78,33 +81,35 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         />
       </ProForm.Group>
 
-      <div>
-        <h4 className={styles.required}>新增级别</h4>
+      {type === 'create' && (
+        <div>
+          <h4 className={styles.required}>新增级别</h4>
 
-        <ProFormList
-          name="grades"
-          creatorButtonProps={{
-            position: 'bottom',
-            creatorButtonText: '新建一行',
-          }}
-          copyIconProps={false}
-        >
-          <ProForm.Group key="courseNames">
-            <ProFormText
-              width="sm"
-              placeholder={'请输入级别名称'}
-              name="name"
-              labelCol={{ span: 0 }}
-              rules={[
-                {
-                  required: true,
-                  message: '请输入级别名称',
-                },
-              ]}
-            />
-          </ProForm.Group>
-        </ProFormList>
-      </div>
+          <ProFormList
+            name="grades"
+            creatorButtonProps={{
+              position: 'bottom',
+              creatorButtonText: '新建一行',
+            }}
+            copyIconProps={false}
+          >
+            <ProForm.Group key="courseNames">
+              <ProFormText
+                width="sm"
+                placeholder={'请输入级别名称'}
+                name="name"
+                labelCol={{ span: 0 }}
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入级别名称',
+                  },
+                ]}
+              />
+            </ProForm.Group>
+          </ProFormList>
+        </div>
+      )}
     </ModalForm>
   );
 };

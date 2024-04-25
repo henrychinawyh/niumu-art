@@ -66,3 +66,14 @@ export async function deleteGrade(params: any) {
     data: params,
   });
 }
+
+// 编辑课程级别
+export async function editCourseGrade(params: any) {
+  return request('/api/courses/editCourseGrade', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}

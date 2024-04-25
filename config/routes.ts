@@ -57,6 +57,17 @@ export default [
     ],
   },
   {
+    path: '/classes',
+    name: '班级管理',
+    routes: [
+      {
+        name: '班级列表',
+        path: '/classes/classesList',
+        component: './Classes/ClassesList',
+      },
+    ],
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',

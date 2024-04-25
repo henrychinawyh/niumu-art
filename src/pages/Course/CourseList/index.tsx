@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useCountDownConfirm } from '@/pages/hooks/useConfirmHook';
+import { useCountDownConfirm } from '@/hooks/useConfirmHook';
 import { ActionType, PageContainer, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button, Space, Table, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import CreateOrEdit from './components/createOrEdit';
+import type { CourseGradeProps } from './components/editGradeName';
+import EditGradeName from './components/editGradeName';
 import { useInitColumns } from './field';
 import { TableListItemProps } from './interface';
 import { deleteCourse, deleteGrade, getCourseGrade, getCourseList } from './services';
@@ -13,10 +15,14 @@ const CourseList: React.FC = () => {
   const formRef = useRef<ProFormInstance>();
   const [confirm, modalContent] = useCountDownConfirm(5);
 
-  const [visible, setVisible] = useState<boolean>(false);
-  const [data, setData] = useState<Partial<TableListItemProps> | null>(null);
-  const [type, setType] = useState<'create' | 'edit'>('create');
-  const [expandData, setExpandData] = useState<any>({});
+  const [visible, setVisible] = useState<boolean>(false); // 新增课程弹框
+  const [data, setData] = useState<Partial<TableListItemProps> | null>(null); // 编辑课程信息
+  const [type, setType] = useState<'create' | 'edit'>('create'); // 操作课程类型
+
+  const [expandData, setExpandData] = useState<any>({}); // 展开课程下的级别信息
+  const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([]); // 控制展开行
+  const [gradeVisible, setGradeVisible] = useState<boolean>(false); // 编辑课程级别名称弹框
+  const [gradeInfo, setGradeInfo] = useState<CourseGradeProps | null>(null);
 
   const columns = useInitColumns(
     (data: TableListItemProps) => {
@@ -41,13 +47,13 @@ const CourseList: React.FC = () => {
   };
 
   // 展开课程行获取课程的所有级别
-  const getGrade = async (r: TableListItemProps) => {
+  const getGrade = async (r: Partial<TableListItemProps>) => {
     const res = await getCourseGrade({ courseId: r.id });
 
     if (res.code === '000') {
       setExpandData((prev: any) => ({
         ...prev,
-        [r.id]: {
+        [r.id as any]: {
           list: res?.data?.list,
           total: res?.data?.total,
         },
@@ -56,7 +62,10 @@ const CourseList: React.FC = () => {
   };
 
   // 编辑级别名称
-  const editGrade = async (id: number, name: string) => {};
+  const editGrade = async (data: CourseGradeProps) => {
+    setGradeInfo(data);
+    setGradeVisible(true);
+  };
 
   // 删除级别
   const delGrade = async (gradeId: number, courseRecord: TableListItemProps) => {
@@ -84,6 +93,7 @@ const CourseList: React.FC = () => {
         rowKey="id"
         request={async (params) => {
           setExpandData({});
+          setExpandedRowKeys([]);
           const res = await getCourseList(params);
 
           return {
@@ -112,6 +122,7 @@ const CourseList: React.FC = () => {
         options={false}
         tableAlertRender={false}
         expandable={{
+          expandedRowKeys,
           expandedRowRender: (record: TableListItemProps) => {
             return (
               <Table
@@ -132,7 +143,18 @@ const CourseList: React.FC = () => {
                     render: (t: string, r: TableListItemProps) => {
                       return (
                         <Space>
-                          <Button type="link">编辑</Button>
+                          <Button
+                            type="link"
+                            onClick={() => {
+                              editGrade({
+                                id: r.id,
+                                name: r.name,
+                                courseId: record.id,
+                              });
+                            }}
+                          >
+                            编辑
+                          </Button>
                           <Button
                             type="link"
                             danger
@@ -151,18 +173,27 @@ const CourseList: React.FC = () => {
             );
           },
           onExpand: (expandable, record) => {
-            if (expandable && !expandData?.[record.id]) {
-              getGrade(record);
+            if (!expandable) {
+              setExpandedRowKeys((prev) => prev.filter((item) => item !== record.id));
+            }
+
+            if (expandable) {
+              if (!expandData?.[record.id]) {
+                getGrade(record);
+              }
+              setExpandedRowKeys((prev) => prev.concat(record.id));
             }
           },
         }}
       />
 
+      {/* 新增编辑课程 */}
       {visible && (
         <CreateOrEdit
           title={type === 'create' ? '新增课程' : '编辑课程'}
           onCancel={(refresh?: boolean) => {
             if (refresh) {
+              setExpandedRowKeys([]); // 将所有展开行收起
               tableRef.current?.reload();
             }
 
@@ -172,6 +203,25 @@ const CourseList: React.FC = () => {
           visible={visible}
           data={data}
           type={type}
+        />
+      )}
+
+      {/* 编辑课程级别名称 */}
+      {gradeInfo && gradeVisible && (
+        <EditGradeName
+          visible={gradeVisible}
+          onCancel={(status) => {
+            if (status) {
+              // 重新查询当前课程下的所有级别
+              getGrade({
+                id: gradeInfo?.courseId,
+              });
+            }
+
+            setGradeInfo(null);
+            setGradeVisible(false);
+          }}
+          info={gradeInfo}
         />
       )}
 
