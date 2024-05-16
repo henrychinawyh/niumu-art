@@ -18,7 +18,9 @@ export const useInitColumns: any = (
   const [classes, setClasses] = useState<DefaultOptionType[]>([]); // 获取级别下的班级
 
   useEffect(() => {
-    getAllCourseList({}).then((res) => [setCourses(res?.data || [])]);
+    getAllCourseList({}).then((res) => {
+      setCourses(res?.data || []);
+    });
   }, []);
 
   // 切换课程时获取当前课程下的级别
@@ -74,7 +76,7 @@ export const useInitColumns: any = (
     },
     {
       title: '班级名称',
-      dataIndex: 'name',
+      dataIndex: 'className',
       valueType: 'select',
       formItemProps: {
         name: 'classId',
@@ -86,12 +88,12 @@ export const useInitColumns: any = (
     },
     {
       title: '教师名称',
-      dataIndex: 'teaName',
+      dataIndex: 'teacherName',
       width: 100,
     },
     {
       title: '学生总数',
-      dataIndex: 'stuTotal',
+      dataIndex: 'total',
       hideInSearch: true,
       width: 100,
     },

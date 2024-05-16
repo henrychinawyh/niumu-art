@@ -14,6 +14,7 @@ export const useInitColumns: any = (
   // 模糊查询学员
   const queryStudent = debounce(async (value: string) => {
     if (!value) {
+      setOptions([]);
       return null;
     } else {
       const res = await getStudent({

@@ -9,6 +9,7 @@ import React, { useRef } from 'react';
 import CreateOrEdit from './components/createOrEdit';
 import { useInitColumns } from './fields';
 import { TableListItemProps } from './interface';
+import { queryClass } from './services';
 
 const ClassesList: React.FC = () => {
   const tableRef = useRef<ActionType>();
@@ -50,16 +51,16 @@ const ClassesList: React.FC = () => {
       <ProTable<TableListItemProps>
         actionRef={tableRef}
         formRef={formRef}
-        rowKey="id"
-        // request={async (params) => {
-        //   const res = await getTeacherList(params);
+        rowKey="classId"
+        request={async (params) => {
+          const res = await queryClass(params);
 
-        //   return {
-        //     data: res.code === '000' ? res.data?.list : [],
-        //     total: res.code === '000' ? res.data?.total : 0,
-        //     success: res.code === '000',
-        //   };
-        // }}
+          return {
+            data: res.code === '000' ? res.data?.list : [],
+            total: res.code === '000' ? res.data?.total : 0,
+            success: res.code === '000',
+          };
+        }}
         pagination={{
           defaultPageSize: 10,
         }}
@@ -86,7 +87,7 @@ const ClassesList: React.FC = () => {
 
       {visible && (
         <CreateOrEdit
-          title={type === 'create' ? '新增教师' : '编辑教师'}
+          title={type === 'create' ? '新增班级' : '编辑班级'}
           onCancel={(refresh?: boolean) => {
             if (refresh) {
               tableRef.current?.reload();

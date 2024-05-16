@@ -159,7 +159,7 @@ const CourseList: React.FC = () => {
                             type="link"
                             danger
                             onClick={() => {
-                              delGrade(r.id, record);
+                              delGrade(r.value, record);
                             }}
                           >
                             删除

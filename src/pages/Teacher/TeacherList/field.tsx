@@ -78,6 +78,9 @@ export const useInitColumns: any = (
       dataIndex: 'idCard',
       width: 95,
       render: (t: any) => (t ? <ReactCopyToClipBoard>{t}</ReactCopyToClipBoard> : '--'),
+      formItemProps: {
+        label: '身份证号',
+      },
     },
     {
       title: '状态',
@@ -87,7 +90,7 @@ export const useInitColumns: any = (
         99: '删除',
       },
       valueType: 'select',
-      initialValue: 1,
+      initialValue: '1',
       width: 100,
     },
     {
