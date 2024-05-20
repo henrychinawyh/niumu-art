@@ -1,8 +1,11 @@
-import { getTeacherList } from '@/pages/Teacher/TeacherList/services';
-import { getDateString } from '@/utils/date';
-import { ModalForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
+import { getAllSubjects } from '@/pages/Course/CourseList/services';
+import { getStudent } from '@/pages/Student/StudentList/services';
+import { queryTeacherWithCourse } from '@/pages/Teacher/TeacherList/services';
+import { ModalForm, ProFormCascader, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Form, message } from 'antd';
-import React from 'react';
+import { DefaultOptionType } from 'antd/es/select';
+import { debounce } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { CreateClassParams, TableListItemProps } from '../interface';
 import { createClass, editClass } from '../services';
 
@@ -18,11 +21,47 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
   const { data, title, visible, onCancel, type = 'create' } = props ?? {};
   const [form] = Form.useForm<CreateClassParams>();
 
-  // 根据输入获取任课教师
-  const changeTeacher = async (val: string) => {};
+  const [teachers, setTeachers] = useState<DefaultOptionType[]>([]);
+  const [students, setStudents] = useState<DefaultOptionType[]>([]);
 
-  // 根据输入获取学员
-  const changeStudent = async (val: string) => {};
+  useEffect(() => {
+    // 回填任课教师以及班级学员
+    if (data) {
+      if (data.courseId) {
+        changeSubject(data.courseId);
+      }
+
+      if (Array.isArray(data.studentList)) {
+        setStudents(
+          data.studentList.map((item) => ({ label: item.name, value: item.id, disabled: true })),
+        );
+      }
+    }
+  }, [data]);
+
+  // 切换课程类目后搜索任课教师
+  const changeSubject = async (val: number) => {
+    const res = await queryTeacherWithCourse({ courseId: val });
+    setTeachers(res?.data || []);
+  };
+
+  // 搜索学员
+  const searchStudent = debounce(async (val: string) => {
+    if (val) {
+      const res = await getStudent({ stuName: val });
+
+      setStudents(
+        students.concat(
+          res?.data
+            ?.filter((item: any) => !students.find((s) => s.value === item.id))
+            ?.map((item: any) => ({
+              label: item.stuName,
+              value: item.id,
+            })),
+        ),
+      );
+    }
+  }, 400);
 
   return (
     <ModalForm<CreateClassParams>
@@ -33,23 +72,31 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         },
         destroyOnClose: true,
         maskClosable: false,
+        width: 450,
       }}
       visible={visible}
       autoFocusFirstInput
       form={form}
       initialValues={{
-        ...data,
-        sex: data?.sex || 1,
-        birthDate: data?.birthDate ? getDateString(data?.birthDate) : undefined,
+        name: data?.className,
+        subject: data?.courseId && data?.gradeId ? [data?.courseId, data?.gradeId] : [],
+        teacherId: data?.teacherId,
+        studentIds: data?.studentList?.map((item) => item.id) || [],
       }}
-      onFinish={async (values) => {
-        const params: CreateClassParams = {
+      onFinish={async (values: any) => {
+        const [courseId, gradeId] = values.subject || [];
+
+        const params: Partial<CreateClassParams> = {
           ...values,
+          courseId,
+          gradeId,
         };
+
+        delete (params as any).subject;
 
         let fn = createClass;
         if (type === 'edit') {
-          params.id = data?.id;
+          params.classId = data?.classId;
           fn = editClass;
         }
 
@@ -80,7 +127,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       <ProFormText
         label="班级名称"
         name="name"
-        colProps={{ span: 12 }}
+        colProps={{ span: 24 }}
         rules={[
           { required: true, message: '班级名称必填' },
           {
@@ -90,34 +137,55 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         ]}
       />
 
+      <ProFormCascader
+        label="课程类目"
+        name="subject"
+        rules={[{ required: true, message: '班级名称必填' }]}
+        colProps={{ span: 24 }}
+        fieldProps={{
+          expandTrigger: 'hover',
+          onChange: (val: any[]) => {
+            if (val?.[0]) {
+              changeSubject(val?.[0]);
+            }
+
+            setTeachers([]);
+          },
+          disabled: type === 'edit',
+        }}
+        request={async () => {
+          const res = await getAllSubjects({
+            layer: 2,
+          });
+
+          return res?.data || [];
+        }}
+      />
+
       <ProFormSelect
         label="任课教师"
         name="teacherId"
-        colProps={{ span: 12 }}
+        colProps={{ span: 24 }}
         rules={[{ required: true, message: '任课教师必选' }]}
-        debounceTime={300}
-        showSearch
-        request={async (params) => {
-          const { keywords } = params;
-
-          if (keywords) {
-            const res = await getTeacherList({
-              name: keywords,
-            });
-
-            return [];
-          }
-
-          return [];
-        }}
+        options={teachers}
       />
 
       <ProFormSelect
         label="班级学员"
         name="studentIds"
-        colProps={{ span: 12 }}
-        rules={[{ required: true, message: '任课教师必选' }]}
-        debounceTime={300}
+        colProps={{ span: 24 }}
+        rules={[{ required: true, message: '班级学员必选' }]}
+        debounceTime={400}
+        fieldProps={{
+          allowClear: false,
+          filterOption: false,
+          mode: 'multiple',
+          onSearch: searchStudent,
+          // maxTagCount: 3,
+          placeholder: '输入搜索班级学员',
+        }}
+        showSearch
+        options={students}
       />
     </ModalForm>
   );

@@ -2,11 +2,13 @@
  * @names 班级管理
  */
 
+import useGetAllSubjects from '@/hooks/useGetAllSubjects';
 import { getTotalWidth } from '@/utils';
-import { ActionType, PageContainer, ProFormInstance, ProTable } from '@ant-design/pro-components';
+import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import React, { useRef } from 'react';
 import CreateOrEdit from './components/createOrEdit';
+import Detail from './components/detail';
 import { useInitColumns } from './fields';
 import { TableListItemProps } from './interface';
 import { queryClass } from './services';
@@ -18,36 +20,26 @@ const ClassesList: React.FC = () => {
   const [visible, setVisible] = React.useState<boolean>(false);
   const [data, setData] = React.useState<Partial<TableListItemProps> | null>(null);
   const [type, setType] = React.useState<'create' | 'edit'>('create');
+  const [detailVis, setDetailVis] = React.useState(false);
+
+  const subjects = useGetAllSubjects();
 
   const columns = useInitColumns(
+    subjects,
     (data: TableListItemProps) => {
       setVisible(true);
       setType('edit');
       setData(data);
     },
-    (id: number) => {
-      // delTeacher(id);
+    (data: TableListItemProps) => {
+      setDetailVis(true);
+      setData(data);
     },
     formRef,
   );
 
-  // 删除班级
-  // const delClass = async (ids: string | string[]) => {
-  //   const res = await deleteClass({
-  //     ids,
-  //   });
-  //   if (res.code === '000') {
-  //     message.success('删除成功');
-  //     tableRef.current?.reload();
-  //   }
-  // };
-
   return (
-    <PageContainer
-      header={{
-        title: null,
-      }}
-    >
+    <div>
       <ProTable<TableListItemProps>
         actionRef={tableRef}
         formRef={formRef}
@@ -85,6 +77,22 @@ const ClassesList: React.FC = () => {
         tableAlertRender={false}
       />
 
+      {/* 查看班级详情 */}
+      {detailVis && (
+        <Detail
+          onCancel={(refresh?: boolean) => {
+            if (refresh) {
+              tableRef.current?.reload();
+            }
+            setData(null);
+            setDetailVis(false);
+          }}
+          visible={detailVis}
+          data={data}
+        />
+      )}
+
+      {/* 创建，编辑班级 */}
       {visible && (
         <CreateOrEdit
           title={type === 'create' ? '新增班级' : '编辑班级'}
@@ -100,7 +108,7 @@ const ClassesList: React.FC = () => {
           type={type}
         />
       )}
-    </PageContainer>
+    </div>
   );
 };
 

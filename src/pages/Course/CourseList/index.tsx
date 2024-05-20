@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { useCountDownConfirm } from '@/hooks/useConfirmHook';
-import { ActionType, PageContainer, ProFormInstance, ProTable } from '@ant-design/pro-components';
+import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button, Space, Table, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import CreateOrEdit from './components/createOrEdit';
@@ -82,11 +81,7 @@ const CourseList: React.FC = () => {
   };
 
   return (
-    <PageContainer
-      header={{
-        title: null,
-      }}
-    >
+    <div>
       <ProTable<TableListItemProps>
         actionRef={tableRef}
         formRef={formRef}
@@ -159,7 +154,7 @@ const CourseList: React.FC = () => {
                             type="link"
                             danger
                             onClick={() => {
-                              delGrade(r.value, record);
+                              // delGrade(r.value, record);
                             }}
                           >
                             删除
@@ -226,7 +221,7 @@ const CourseList: React.FC = () => {
       )}
 
       {modalContent}
-    </PageContainer>
+    </div>
   );
 };
 

@@ -1,4 +1,6 @@
-import { getDateString, getWholeDateString } from '@/utils/date';
+import FormatDate from '@/components/Date/FormatDate';
+import { GENDER } from '@/utils/constant';
+import { getDateString } from '@/utils/date';
 import { Button, Popconfirm, Select } from 'antd';
 import { debounce } from 'lodash';
 import { useState } from 'react';
@@ -57,10 +59,7 @@ export const useInitColumns: any = (
     {
       title: '性别',
       dataIndex: 'sex',
-      valueEnum: {
-        1: '男',
-        2: '女',
-      },
+      valueEnum: GENDER,
     },
     {
       title: '身份证号',
@@ -85,16 +84,14 @@ export const useInitColumns: any = (
     {
       title: '创建时间',
       dataIndex: 'createTs',
-      valueType: 'date',
       hideInSearch: true,
-      render: (dom: any, r: TableListItemProps) =>
-        r.createTs ? getWholeDateString(r.createTs) : '',
+      renderText: (t: any) => <FormatDate time={t} />,
     },
     {
       title: '更新时间',
       dataIndex: 'updateTs',
       hideInSearch: true,
-      renderText: (t: any) => (t ? getWholeDateString(t) : ''),
+      renderText: (t: any) => <FormatDate time={t} />,
     },
     {
       title: '操作',

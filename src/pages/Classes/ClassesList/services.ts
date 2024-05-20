@@ -6,7 +6,7 @@ const prefix = '/api/classes';
 // createClass
 //
 // 创建班级
-export async function createClass(params: CreateClassParams) {
+export async function createClass(params?: Partial<CreateClassParams>) {
   return request(`${prefix}/createClass`, {
     method: 'POST',
     headers: {
@@ -27,5 +27,46 @@ export async function queryClass(params: API.ApiParams & API.PageParams) {
   });
 }
 
-// 删除班级
-export async function editClass(params: any) {}
+// 查询班级中对应的学员
+export async function getStudentsInClass(params: any) {
+  return request(`${prefix}/getStudentsInClass`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 编辑班级
+export async function editClass(params?: Partial<CreateClassParams>) {
+  return request(`${prefix}/editClass`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 查询学员是否还有未销的课时
+export async function hasRemianCourseCount(params?: any) {
+  return request(`${prefix}/hasRemianCourseCount`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 删除学员
+export async function deleteStudentOfClass(params?: any) {
+  return request(`${prefix}/deleteStudentOfClass`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}

@@ -1,5 +1,6 @@
 import ReactCopyToClipBoard from '@/components/ReactCopyToClipBoard';
 import { getAllCourseList } from '@/pages/Course/CourseList/services';
+import { GENDER } from '@/utils/constant';
 import { getDateString, getWholeDateString } from '@/utils/date';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ProColumns } from '@ant-design/pro-components';
@@ -60,10 +61,7 @@ export const useInitColumns: any = (
     {
       title: '性别',
       dataIndex: 'sex',
-      valueEnum: {
-        1: '男',
-        2: '女',
-      },
+      valueEnum: GENDER,
       width: 60,
     },
     {

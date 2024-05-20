@@ -1,4 +1,6 @@
+import { objectToArray } from '@/utils';
 import { getBirthdayByIdCard } from '@/utils/birthday';
+import { GENDER } from '@/utils/constant';
 import { getAgeByBirth, getDateString } from '@/utils/date';
 import {
   ModalForm,
@@ -135,10 +137,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         label="性别"
         name="sex"
         colProps={{ span: 12 }}
-        options={[
-          { label: '男', value: 1 },
-          { label: '女', value: 2 },
-        ]}
+        options={objectToArray(GENDER)}
         radioType="button"
       />
 

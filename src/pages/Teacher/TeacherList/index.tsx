@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { downloadExcel, getTotalWidth } from '@/utils';
-import { ActionType, PageContainer, ProFormInstance, ProTable } from '@ant-design/pro-components';
+import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm, message } from 'antd';
 import React, { useRef } from 'react';
 import CreateOrEdit from './components/createOrEdit';
@@ -64,11 +64,7 @@ const TeacherList: React.FC = () => {
   };
 
   return (
-    <PageContainer
-      header={{
-        title: null,
-      }}
-    >
+    <div>
       <ProTable<TableListItemProps>
         actionRef={tableRef}
         formRef={formRef}
@@ -136,7 +132,7 @@ const TeacherList: React.FC = () => {
           options={courseOptions}
         />
       )}
-    </PageContainer>
+    </div>
   );
 };
 

@@ -1,21 +1,33 @@
-export interface TableListItemProps {
+export interface StudentProps {
   id: number;
+  name: string;
+  birthDate: string;
+  sex: number;
+  remainCourseCount: number;
+}
+
+export interface TableListItemProps {
+  classId: number;
+  className: string;
   courseName: string;
   gradeName: string;
-  name: string;
-  teaName: string;
-  stuTotal: number;
-  status: number;
+  courseId: number;
+  gradeId: number;
+  teacherName: string;
+  teacherId: number;
+  total: number;
   createTs: string;
-  updateTs: string;
+  studentList?: Array<{
+    StudentProps;
+  }>;
   [keys: string]: any;
 }
 
 export interface CreateClassParams {
   courseId: number;
   gradeId: number;
-  id: number;
+  classId: number;
   name: string;
   teacherId: string;
-  stuGroup: number[];
+  studentIds: number[];
 }

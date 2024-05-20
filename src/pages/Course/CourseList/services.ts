@@ -90,3 +90,14 @@ export async function editCourseGrade(params: any) {
     data: params,
   });
 }
+
+// 查询所有的课程类目
+export async function getAllSubjects(params: any) {
+  return request(`${prefix}/getAllSubjects`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
