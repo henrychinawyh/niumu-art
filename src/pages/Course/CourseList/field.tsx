@@ -1,14 +1,13 @@
-import useCountDown from '@/hooks/useCountDown';
 import { getWholeDateString } from '@/utils/date';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import { TableListItemProps } from './interface';
 
 export const useInitColumns: any = (
   editFn?: (data: TableListItemProps) => void,
-  deleteFn?: (id: string) => void,
+  deleteFn?: (id: number) => void,
+  addGradeFn?: (id: number) => void,
 ) => {
-  const [seconds, isActive, start, reset] = useCountDown(5);
-
   const columns = [
     {
       title: '课程名称',
@@ -23,6 +22,11 @@ export const useInitColumns: any = (
         r.createTs ? getWholeDateString(r.createTs) : '',
     },
     {
+      title: '课程学员人数(人)',
+      dataIndex: 'courseStuTotal',
+      hideInSearch: true,
+    },
+    {
       title: '操作',
       dataIndex: 'id',
       valueType: 'option',
@@ -33,34 +37,35 @@ export const useInitColumns: any = (
               <Button
                 key="edit"
                 type="link"
+                icon={<EditOutlined />}
                 onClick={() => {
                   editFn?.(record);
                 }}
               >
                 编辑
               </Button>,
-              <Popconfirm
-                key="delete"
-                title="删除课程会将其下所有的级别，班级，学员一并删除，请谨慎操作！"
-                onConfirm={() => {
-                  deleteFn?.(`${record.id}`);
+              <Button
+                type="link"
+                key="addGrade"
+                onClick={() => {
+                  addGradeFn?.(record?.id);
                 }}
-                okButtonProps={{
-                  disabled: isActive,
-                }}
-                okText={isActive ? `确定(${seconds}s)` : '确定'}
               >
-                <Button
-                  type="link"
-                  danger
-                  onClick={() => {
-                    reset();
-                    start();
+                添加级别
+              </Button>,
+              record.courseStuTotal <= 0 && (
+                <Popconfirm
+                  key="delete"
+                  title="删除班级"
+                  onConfirm={() => {
+                    deleteFn?.(record.id);
                   }}
                 >
-                  删除
-                </Button>
-              </Popconfirm>,
+                  <Button type="link" danger icon={<DeleteOutlined />}>
+                    删除
+                  </Button>
+                </Popconfirm>
+              ),
             ],
     },
   ];

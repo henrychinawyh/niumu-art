@@ -69,6 +69,17 @@ export async function getCourseGrade(params: any) {
   });
 }
 
+// 新增课程级别
+export async function addCourseGrade(params: any) {
+  return request(`${prefix}/addCourseGrade`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
 // 删除课程级别
 export async function deleteGrade(params: any) {
   return request(`${prefix}/deleteCourseGrade`, {

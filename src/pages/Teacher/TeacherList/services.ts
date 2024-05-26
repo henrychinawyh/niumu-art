@@ -80,3 +80,14 @@ export async function queryTeacherByName(params: any) {
     data: params,
   });
 }
+
+// 根据班级id查询教师
+export async function getTeacherByClassId(params: any) {
+  return request(`${prefix}/getTeacherByClassId`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}

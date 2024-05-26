@@ -1,18 +1,26 @@
-import { useCountDownConfirm } from '@/hooks/useConfirmHook';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
-import { Button, Space, Table, message } from 'antd';
+import { Button, Popconfirm, Space, Table, message } from 'antd';
+import { uniqBy } from 'lodash';
 import React, { useRef, useState } from 'react';
+import AddGrade from './components/addGrade';
 import CreateOrEdit from './components/createOrEdit';
 import type { CourseGradeProps } from './components/editGradeName';
 import EditGradeName from './components/editGradeName';
 import { useInitColumns } from './field';
-import { TableListItemProps } from './interface';
-import { deleteCourse, deleteGrade, getCourseGrade, getCourseList } from './services';
+import { GradeItemProps, TableListItemProps } from './interface';
+import {
+  addCourseGrade,
+  deleteCourse,
+  deleteGrade,
+  getCourseGrade,
+  getCourseList,
+} from './services';
 
 const CourseList: React.FC = () => {
   const tableRef = useRef<ActionType>();
   const formRef = useRef<ProFormInstance>();
-  const [confirm, modalContent] = useCountDownConfirm(5);
+  // const [confirm, modalContent] = useCountDownConfirm(5);
 
   const [visible, setVisible] = useState<boolean>(false); // 新增课程弹框
   const [data, setData] = useState<Partial<TableListItemProps> | null>(null); // 编辑课程信息
@@ -23,19 +31,27 @@ const CourseList: React.FC = () => {
   const [gradeVisible, setGradeVisible] = useState<boolean>(false); // 编辑课程级别名称弹框
   const [gradeInfo, setGradeInfo] = useState<CourseGradeProps | null>(null);
 
+  // 为课程新增级别
+  const [gradeVis, setGradeVis] = useState(false);
+  const [courseId, setCourseId] = useState<number>();
+
   const columns = useInitColumns(
     (data: TableListItemProps) => {
       setVisible(true);
       setType('edit');
       setData(data);
     },
-    (id: string) => {
+    (id: number) => {
       delCourse(id);
+    },
+    (id: number) => {
+      setCourseId(id);
+      setGradeVis(true);
     },
   );
 
   // 删除课程
-  const delCourse = async (id: string | string[]) => {
+  const delCourse = async (id: number) => {
     const res = await deleteCourse({
       id,
     });
@@ -60,6 +76,33 @@ const CourseList: React.FC = () => {
     }
   };
 
+  // 为课程新增级别
+  const addGrade = async (values: any) => {
+    const { grades } = values || {};
+
+    if (uniqBy(grades, 'name')?.length < grades.length) {
+      message.error('级别名称不能重复');
+      return;
+    }
+
+    const params: any = {
+      courseId,
+      grades,
+    };
+
+    const res = await addCourseGrade(params);
+
+    if (res?.code === '000') {
+      message.success(res?.message);
+      setGradeVis(false);
+
+      // 请求课程级别
+      getGrade({
+        id: courseId,
+      });
+    }
+  };
+
   // 编辑级别名称
   const editGrade = async (data: CourseGradeProps) => {
     setGradeInfo(data);
@@ -67,17 +110,23 @@ const CourseList: React.FC = () => {
   };
 
   // 删除级别
-  const delGrade = async (gradeId: number, courseRecord: TableListItemProps) => {
-    confirm({
-      title: '删除级别',
-      content: '删除级别会将级别下所有的班级以及班级学员一并删除',
-      onOk: async () => {
-        const res = await deleteGrade({ id: gradeId });
-        if (res.code === '000') {
-          getGrade(courseRecord);
-        }
-      },
+  const delGrade = async (params: any) => {
+    const { courseId, gradeId } = params;
+
+    const res = await deleteGrade({
+      id: gradeId,
     });
+    message.success(res?.message || '删除成功');
+    if (res?.data) {
+      console.log(expandData, courseId, gradeId);
+
+      setExpandData((prev: any) => {
+        prev[courseId].list = prev[courseId].list.filter((item: any) => item.value !== gradeId);
+        prev[courseId].total -= 1;
+
+        return JSON.parse(JSON.stringify(prev));
+      });
+    }
   };
 
   return (
@@ -121,7 +170,7 @@ const CourseList: React.FC = () => {
           expandedRowRender: (record: TableListItemProps) => {
             return (
               <Table
-                rowKey={'id'}
+                rowKey={'value'}
                 size="small"
                 pagination={{
                   total: expandData?.[record?.id]?.total || 0,
@@ -133,32 +182,43 @@ const CourseList: React.FC = () => {
                     dataIndex: 'label',
                   },
                   {
+                    title: '级别学员人数',
+                    dataIndex: 'gradeStuTotal',
+                  },
+                  {
                     title: '操作',
                     dataIndex: 'opt',
-                    render: (t: string, r: TableListItemProps) => {
+                    render: (t: string, r: GradeItemProps) => {
                       return (
                         <Space>
                           <Button
                             type="link"
+                            icon={<EditOutlined />}
                             onClick={() => {
                               editGrade({
-                                id: r.id,
-                                name: r.name,
+                                id: r.value,
+                                name: r.label,
                                 courseId: record.id,
                               });
                             }}
                           >
                             编辑
                           </Button>
-                          <Button
-                            type="link"
-                            danger
-                            onClick={() => {
-                              // delGrade(r.value, record);
-                            }}
-                          >
-                            删除
-                          </Button>
+                          {r.gradeStuTotal <= 0 && (
+                            <Popconfirm
+                              title="确认删除级别"
+                              onConfirm={() =>
+                                delGrade({
+                                  gradeId: r.value,
+                                  courseId: record.id,
+                                })
+                              }
+                            >
+                              <Button type="link" icon={<DeleteOutlined />} danger>
+                                删除
+                              </Button>
+                            </Popconfirm>
+                          )}
                         </Space>
                       );
                     },
@@ -220,7 +280,17 @@ const CourseList: React.FC = () => {
         />
       )}
 
-      {modalContent}
+      {/* 新增课程级别 */}
+      {gradeVis && (
+        <AddGrade
+          visible={gradeVis}
+          title="新增课程"
+          onFinish={addGrade}
+          onCancel={() => {
+            setGradeVis(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -65,6 +65,11 @@ export default [
         path: '/classes/classesList',
         component: './Classes/ClassesList',
       },
+      {
+        name: '班级考勤',
+        path: '/classes/attendance',
+        component: './Classes/Attendance',
+      },
     ],
   },
   {

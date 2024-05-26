@@ -24,6 +24,8 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
   const [teachers, setTeachers] = useState<DefaultOptionType[]>([]);
   const [students, setStudents] = useState<DefaultOptionType[]>([]);
 
+  const [defaultStudents, setDefaultStudents] = useState<DefaultOptionType[]>([]);
+
   useEffect(() => {
     // 回填任课教师以及班级学员
     if (data) {
@@ -32,6 +34,9 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       }
 
       if (Array.isArray(data.studentList)) {
+        setDefaultStudents(
+          data.studentList.map((item) => ({ label: item.name, value: item.id, disabled: true })),
+        );
         setStudents(
           data.studentList.map((item) => ({ label: item.name, value: item.id, disabled: true })),
         );
@@ -51,7 +56,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       const res = await getStudent({ stuName: val });
 
       setStudents(
-        students.concat(
+        (defaultStudents?.length > 0 ? students : []).concat(
           res?.data
             ?.filter((item: any) => !students.find((s) => s.value === item.id))
             ?.map((item: any) => ({

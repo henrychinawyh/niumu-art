@@ -2,6 +2,7 @@ import { request } from '@umijs/max';
 import { CreateClassParams } from './interface';
 
 const prefix = '/api/classes';
+export const purchasePrefix = '/api/purchase';
 
 // createClass
 //
@@ -63,6 +64,28 @@ export async function hasRemianCourseCount(params?: any) {
 // 删除学员
 export async function deleteStudentOfClass(params?: any) {
   return request(`${prefix}/deleteStudentOfClass`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 删除班级
+export async function deleteClass(params?: any) {
+  return request(`${prefix}/deleteClass`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
+
+// 新增课时
+export async function addCourseClass(params?: any) {
+  return request(`${purchasePrefix}/add`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

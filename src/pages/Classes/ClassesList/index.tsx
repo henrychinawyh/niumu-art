@@ -35,6 +35,9 @@ const ClassesList: React.FC = () => {
       setDetailVis(true);
       setData(data);
     },
+    () => {
+      tableRef.current?.reload();
+    },
     formRef,
   );
 
@@ -44,7 +47,16 @@ const ClassesList: React.FC = () => {
         actionRef={tableRef}
         formRef={formRef}
         rowKey="classId"
-        request={async (params) => {
+        request={async (options) => {
+          const { subject, teacherName } = options;
+          const params: any = { teacherName, current: options.current, pageSize: options.pageSize };
+
+          if (Array.isArray(subject)) {
+            params.courseId = subject[0];
+            params.gradeId = subject[1];
+            params.classId = subject[2];
+          }
+
           const res = await queryClass(params);
 
           return {

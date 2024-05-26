@@ -4,6 +4,8 @@ export interface StudentProps {
   birthDate: string;
   sex: number;
   remainCourseCount: number;
+  payId: number;
+  studentId: number;
 }
 
 export interface TableListItemProps {
@@ -17,9 +19,7 @@ export interface TableListItemProps {
   teacherId: number;
   total: number;
   createTs: string;
-  studentList?: Array<{
-    StudentProps;
-  }>;
+  studentList?: Array<StudentProps>;
   [keys: string]: any;
 }
 

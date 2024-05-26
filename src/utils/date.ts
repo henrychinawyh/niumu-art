@@ -12,3 +12,8 @@ export const getWholeDateString = (
 export const getAgeByBirth = (birth: Moment) => moment().diff(birth, 'years');
 
 export const getDateString = (date: any = moment()) => getWholeDateString(date, 'YYYY-MM-DD');
+
+// 传入一个时间，将时间转换成固定格式的数组
+export const getDateStringArray = (date: any, format = 'YYYY-MM-DD HH:mm:ss') => {
+  return [getWholeDateString(date, format), getWholeDateString(date, format)];
+};

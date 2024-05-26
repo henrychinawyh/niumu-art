@@ -34,7 +34,7 @@ const EditGradeName: React.FC<EditGradeNameProps> = (props) => {
         const values = await form.validateFields();
 
         const res = await editCourseGrade({
-          ...info,
+          id: info?.id,
           ...values,
         });
 

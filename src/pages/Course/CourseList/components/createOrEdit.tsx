@@ -1,5 +1,6 @@
 import { ModalForm, ProForm, ProFormList, ProFormText } from '@ant-design/pro-components';
 import { Form, message } from 'antd';
+import { uniqBy } from 'lodash';
 import React from 'react';
 import styles from '../index.less';
 import { TableListItemProps } from '../interface';
@@ -38,6 +39,11 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         if (!values.grades?.length && type === 'create') {
           message.error('请至少添加一个级别');
           return false;
+        }
+
+        if (uniqBy(values.grades, 'name')?.length < values.grades.length) {
+          message.error('级别名称不能重复');
+          return;
         }
 
         let fn = createCourse;
