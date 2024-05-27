@@ -5,11 +5,12 @@
 import useGetAllSubjects from '@/hooks/useGetAllSubjects';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { ProColumns } from '@ant-design/pro-components';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
 import moment, { Moment } from 'moment';
 import React, { useMemo } from 'react';
+import { createAttendance } from './services';
 
-const useInitColumns = () => {
+const useInitColumns = (reloadTable: () => void) => {
   const subjects = useGetAllSubjects();
 
   const [selectedRange, setSelectedRange] = React.useState<Array<Moment>>([
@@ -101,6 +102,16 @@ const useInitColumns = () => {
             onCell: (record) => {
               return {
                 onDoubleClick: () => {
+                  if (record?.remainCourseCount === 0) {
+                    message.warning('该学员已无剩余课销，无法考勤');
+                    return;
+                  }
+
+                  if (record?.attendanceRecords?.includes(day)) {
+                    message.warning('该学员已考勤');
+                    return;
+                  }
+
                   Modal.confirm({
                     title: `考勤编辑`,
                     content: (
@@ -119,8 +130,21 @@ const useInitColumns = () => {
                     ),
                     okText: '已确认',
                     cancelText: '未上课',
-                    onOk: () => {
-                      console.log('已上课');
+                    onOk: async () => {
+                      const params: any = {
+                        studentClassId: record.id,
+                        studentId: record.studentId,
+                        classId: record.classId,
+                        attendDate: moment(day).format('YYYY-MM-DD HH:mm:ss'),
+                        payId: record.payId,
+                      };
+
+                      const res = await createAttendance(params);
+
+                      if (res?.data) {
+                        // 新增考勤成功，刷新
+                        reloadTable();
+                      }
                     },
                   });
                 },
@@ -130,7 +154,7 @@ const useInitColumns = () => {
               };
             },
             render: (_: any, record: any) => {
-              return record?.[day] ? (
+              return record?.attendanceRecords?.includes(day) ? (
                 <CheckCircleOutlined
                   style={{
                     fontSize: 20,

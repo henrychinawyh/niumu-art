@@ -15,7 +15,9 @@ const Attendance: React.FC = () => {
   const tableRef = useRef<ActionType>();
 
   const [teacher, setTeacher] = useState<TeacherProps>();
-  const columns = useInitColumns();
+  const columns = useInitColumns(() => {
+    tableRef.current?.reload();
+  });
 
   // 查询教师
   const queryTeacher = async (classId: number) => {
@@ -41,6 +43,13 @@ const Attendance: React.FC = () => {
             };
           }
 
+          if (options?.costTime?.length !== 2) {
+            message.error(`考勤时间范围需要选择日期范围才能查询`);
+            return {
+              success: false,
+            };
+          }
+
           const { subject, costTime, current, pageSize } = options;
           const [courseId, gradeId, classId] = subject || [];
 
@@ -52,11 +61,9 @@ const Attendance: React.FC = () => {
             pageSize,
           };
 
-          if (costTime?.length > 0) {
-            const [costTimeStart, costTimeEnd] = getDateStringArray(costTime);
-            params.costTimeStart = costTimeStart;
-            params.costTimeEnd = costTimeEnd;
-          }
+          const [costTimeStart, costTimeEnd] = getDateStringArray(costTime);
+          params.costTimeStart = costTimeStart;
+          params.costTimeEnd = costTimeEnd;
 
           const res = await getAttendanceList(params);
           await queryTeacher(classId); // 查询班级的教师

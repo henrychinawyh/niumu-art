@@ -14,8 +14,8 @@ export async function getAttendanceList(params?: any) {
 }
 
 // 记录一次考勤
-export async function recordAttendance(params?: any) {
-  return request(`${prefix}/recordAttendance`, {
+export async function createAttendance(params?: any) {
+  return request(`${prefix}/createAttendance`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
