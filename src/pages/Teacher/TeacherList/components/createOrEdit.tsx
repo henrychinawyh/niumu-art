@@ -1,4 +1,4 @@
-import { objectToArray } from '@/utils';
+import { convertObjectToArray } from '@/utils';
 import { getBirthdayByIdCard } from '@/utils/birthday';
 import { GENDER } from '@/utils/constant';
 import { getAgeByBirth, getDateString } from '@/utils/date';
@@ -137,7 +137,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         label="性别"
         name="sex"
         colProps={{ span: 12 }}
-        options={objectToArray(GENDER)}
+        options={convertObjectToArray(GENDER)}
         radioType="button"
       />
 

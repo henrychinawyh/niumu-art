@@ -55,7 +55,7 @@ export const getTotalWidth = (columns: ProColumns<any>[]) => {
 };
 
 // 将对象转换为数组的label value格式
-export const objectToArray = (obj: any) => {
+export const convertObjectToArray = (obj: any) => {
   if (!obj) return [];
   const arr: Array<{ label: any; value: any }> = [];
   Object.keys(obj).forEach((key) => {

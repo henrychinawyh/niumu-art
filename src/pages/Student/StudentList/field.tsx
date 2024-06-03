@@ -1,6 +1,7 @@
 import FormatDate from '@/components/Date/FormatDate';
-import { GENDER } from '@/utils/constant';
+import { GENDER, RELATIONSHIP } from '@/utils/constant';
 import { getDateString } from '@/utils/date';
+import { ProColumns } from '@ant-design/pro-components';
 import { Button, Popconfirm, Select } from 'antd';
 import { debounce } from 'lodash';
 import { useState } from 'react';
@@ -34,7 +35,7 @@ export const useInitColumns: any = (
     }
   }, 300);
 
-  const columns = [
+  const columns: ProColumns<TableListItemProps>[] = [
     {
       title: '学员姓名',
       dataIndex: 'stuName',
@@ -66,6 +67,26 @@ export const useInitColumns: any = (
       dataIndex: 'idCard',
     },
     {
+      title: '是否有兄妹',
+      dataIndex: 'hasCousin',
+      valueEnum: RELATIONSHIP,
+      renderText: (t) => {
+        console.log(t);
+        if (t && typeof t === 'string') {
+          return t
+            ?.split(',')
+            .map((item: string) => RELATIONSHIP[Number(item) as keyof typeof RELATIONSHIP]);
+        } else {
+          return '--';
+        }
+      },
+    },
+    {
+      title: '就读学校',
+      dataIndex: 'schoolName',
+      hideInSearch: true,
+    },
+    {
       title: '状态',
       dataIndex: 'status',
       valueEnum: {
@@ -73,6 +94,7 @@ export const useInitColumns: any = (
         99: '删除',
       },
       valueType: 'select',
+      hideInTable: true,
       initialValue: '1',
     },
     {

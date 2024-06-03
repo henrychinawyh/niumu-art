@@ -1,11 +1,12 @@
-import { objectToArray } from '@/utils';
+import { convertObjectToArray } from '@/utils';
 import { getBirthdayByIdCard } from '@/utils/birthday';
-import { GENDER } from '@/utils/constant';
+import { GENDER, RELATIONSHIP } from '@/utils/constant';
 import { getDateString } from '@/utils/date';
 import {
   ModalForm,
   ProFormDatePicker,
   ProFormRadio,
+  ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
 import { Form, message } from 'antd';
@@ -14,7 +15,10 @@ import { TableListItemProps } from '../interface';
 import { createStudent, editStudent } from '../services';
 
 type FormSubmitProps = Partial<
-  Pick<TableListItemProps, 'idCard' | 'phoneNumber' | 'sex' | 'stuName' | 'birthDate' | 'id'>
+  Pick<
+    TableListItemProps,
+    'idCard' | 'phoneNumber' | 'sex' | 'stuName' | 'birthDate' | 'id' | 'hasCousin' | 'schoolName'
+  >
 >;
 
 interface IProps {
@@ -45,14 +49,19 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       form={form}
       initialValues={{
         ...data,
-        sex: data?.sex || 1,
+        sex: `${data?.sex}` || `1`,
         birthDate: data?.birthDate ? getDateString(data?.birthDate) : undefined,
+        hasCousin: (data?.hasCousin || '')?.split(','),
       }}
       onFinish={async (values) => {
         const params: FormSubmitProps = {
           ...values,
           idCard: values.idCard?.toUpperCase(),
         };
+
+        if (Array.isArray(values?.hasCousin) && values?.hasCousin?.length > 0) {
+          params.hasCousin = values.hasCousin.join(',');
+        }
 
         let fn = createStudent;
         if (type === 'edit') {
@@ -123,7 +132,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         label="性别"
         name="sex"
         colProps={{ span: 12 }}
-        options={objectToArray(GENDER)}
+        options={convertObjectToArray(GENDER)}
         radioType="button"
       />
 
@@ -152,6 +161,17 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         dataFormat="YYYY-MM-DD"
         disabled
       />
+
+      <ProFormSelect
+        label="有无兄妹"
+        name="hasCousin"
+        colProps={{ span: 12 }}
+        allowClear
+        mode="multiple"
+        options={convertObjectToArray(RELATIONSHIP)}
+      />
+
+      <ProFormText label="就读学校" name="schoolName" colProps={{ span: 12 }} />
     </ModalForm>
   );
 };

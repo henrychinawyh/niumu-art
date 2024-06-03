@@ -3,3 +3,11 @@ export const GENDER = {
   1: '男',
   2: '女',
 };
+
+// 兄妹关系
+export const RELATIONSHIP = {
+  0: '姐姐',
+  1: '妹妹',
+  2: '哥哥',
+  3: '弟弟',
+};
