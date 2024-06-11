@@ -10,7 +10,8 @@ import { getStudent } from './services';
 
 export const useInitColumns: any = (
   editFn?: (data: TableListItemProps) => void,
-  deleteFn?: (id: string) => void,
+  deleteFn?: (data: TableListItemProps) => void,
+  relateFamilyFn?: (data: TableListItemProps) => void,
 ) => {
   const [options, setOptions] = useState([]);
 
@@ -71,7 +72,6 @@ export const useInitColumns: any = (
       dataIndex: 'hasCousin',
       valueEnum: RELATIONSHIP,
       renderText: (t) => {
-        console.log(t);
         if (t && typeof t === 'string') {
           return t
             ?.split(',')
@@ -126,20 +126,33 @@ export const useInitColumns: any = (
               <Button
                 key="edit"
                 type="link"
+                size="small"
                 onClick={() => {
                   editFn?.(record);
                 }}
               >
                 编辑
               </Button>,
+              !record.familyId && (
+                <Button
+                  key="relateFamily"
+                  type="link"
+                  size="small"
+                  onClick={() => {
+                    relateFamilyFn?.(record);
+                  }}
+                >
+                  关联家庭
+                </Button>
+              ),
               <Popconfirm
                 key="delete"
                 title="请确认是否要删除此位学员？"
                 onConfirm={() => {
-                  deleteFn?.(`${record.id}`);
+                  deleteFn?.(record);
                 }}
               >
-                <Button type="link" danger>
+                <Button type="link" danger size="small">
                   删除
                 </Button>
               </Popconfirm>,

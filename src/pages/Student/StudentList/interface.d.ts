@@ -11,5 +11,7 @@ export interface TableListItemProps {
   age: number;
   hasCousin: string;
   schoolName: string;
+  familyId: string;
+  isMain: number;
   [keys: string]: any;
 }

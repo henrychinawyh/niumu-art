@@ -49,9 +49,9 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       form={form}
       initialValues={{
         ...data,
-        sex: `${data?.sex}` || `1`,
+        sex: data?.sex ? `${data?.sex}` : `1`,
         birthDate: data?.birthDate ? getDateString(data?.birthDate) : undefined,
-        hasCousin: (data?.hasCousin || '')?.split(','),
+        hasCousin: data?.hasCousin ? data.hasCousin?.split(',') : [],
       }}
       onFinish={async (values) => {
         const params: FormSubmitProps = {

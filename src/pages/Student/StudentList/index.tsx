@@ -2,8 +2,9 @@
 import { downloadExcel } from '@/utils';
 import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm, message } from 'antd';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import CreateOrEdit from './components/createOrEdit';
+import RelateFamily from './components/relateFamily';
 import { useInitColumns } from './field';
 import { TableListItemProps } from './interface';
 import { deleteStudent, exportStudent, getStudentList } from './services';
@@ -12,19 +13,33 @@ const StudentList: React.FC = () => {
   const tableRef = useRef<ActionType>();
   const formRef = useRef<ProFormInstance>();
 
-  const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
-  const [selectedRows, setSelectedRows] = React.useState<TableListItemProps[]>([]);
-  const [visible, setVisible] = React.useState<boolean>(false);
-  const [data, setData] = React.useState<Partial<TableListItemProps> | null>(null);
-  const [type, setType] = React.useState<'create' | 'edit'>('create');
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [selectedRows, setSelectedRows] = useState<TableListItemProps[]>([]);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [data, setData] = useState<Partial<TableListItemProps> | null>(null);
+  const [type, setType] = useState<'create' | 'edit'>('create');
+
+  // 关联家庭
+  const [relateVis, setRelateVis] = useState(false);
+
   const columns = useInitColumns(
     (data: TableListItemProps) => {
       setVisible(true);
       setType('edit');
       setData(data);
     },
-    (id: string) => {
-      delStudent(id);
+    (data: TableListItemProps) => {
+      delStudent([
+        {
+          studentId: data.id,
+          familyId: data.familyId,
+          isMain: data.isMain,
+        },
+      ]);
+    },
+    (data: TableListItemProps) => {
+      setRelateVis(true);
+      setData(data);
     },
   );
 
@@ -42,10 +57,8 @@ const StudentList: React.FC = () => {
   };
 
   // 删除学员
-  const delStudent = async (ids: string | string[]) => {
-    const res = await deleteStudent({
-      ids,
-    });
+  const delStudent = async (data: any[]) => {
+    const res = await deleteStudent(data);
     if (res.code === '000') {
       message.success('删除成功');
       tableRef.current?.reload();
@@ -98,7 +111,15 @@ const StudentList: React.FC = () => {
           <Popconfirm
             key="batchDelete"
             title="请确认是否要删除选中学员"
-            onConfirm={() => delStudent(selectedKeys)}
+            onConfirm={() =>
+              delStudent(
+                selectedRows.map((item) => ({
+                  studentId: item.id,
+                  familyId: item.familyId,
+                  isMain: item.isMain,
+                })),
+              )
+            }
           >
             <Button type="primary" danger disabled={!selectedRows.length}>
               批量删除学员
@@ -113,6 +134,7 @@ const StudentList: React.FC = () => {
         tableAlertRender={false}
       />
 
+      {/* 创建，编辑学员 */}
       {visible && (
         <CreateOrEdit
           title={type === 'create' ? '新增学员' : '编辑学员'}
@@ -127,6 +149,21 @@ const StudentList: React.FC = () => {
           visible={visible}
           data={data}
           type={type}
+        />
+      )}
+
+      {/* 关联家庭 */}
+      {relateVis && (
+        <RelateFamily
+          onCancel={(refresh) => {
+            setRelateVis(false);
+
+            if (refresh) {
+              tableRef.current?.reload();
+            }
+          }}
+          visible={relateVis}
+          data={data}
         />
       )}
     </div>
