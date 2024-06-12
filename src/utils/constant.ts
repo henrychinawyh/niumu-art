@@ -11,3 +11,9 @@ export const RELATIONSHIP = {
   2: '哥哥',
   3: '弟弟',
 };
+
+// 是否
+export const YES_OR_NO = {
+  0: '否',
+  1: '是',
+};

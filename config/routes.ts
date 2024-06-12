@@ -35,6 +35,17 @@ export default [
     ],
   },
   {
+    path: '/family',
+    name: '家庭管理',
+    routes: [
+      {
+        name: '家庭表',
+        path: '/family/familyList',
+        component: './Family/FamilyList',
+      },
+    ],
+  },
+  {
     path: '/teacher',
     name: '教师管理',
     routes: [
