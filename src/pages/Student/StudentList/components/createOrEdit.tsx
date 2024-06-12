@@ -1,10 +1,13 @@
+import { query } from '@/pages/Family/services';
 import { convertObjectToArray } from '@/utils';
 import { getBirthdayByIdCard } from '@/utils/birthday';
 import { GENDER, RELATIONSHIP } from '@/utils/constant';
 import { getDateString } from '@/utils/date';
 import {
   ModalForm,
+  ProForm,
   ProFormDatePicker,
+  ProFormDependency,
   ProFormRadio,
   ProFormSelect,
   ProFormText,
@@ -13,11 +16,22 @@ import { Form, message } from 'antd';
 import React from 'react';
 import { TableListItemProps } from '../interface';
 import { createStudent, editStudent } from '../services';
+import { RELATE_WAY } from './relateFamily';
 
 type FormSubmitProps = Partial<
   Pick<
     TableListItemProps,
-    'idCard' | 'phoneNumber' | 'sex' | 'stuName' | 'birthDate' | 'id' | 'hasCousin' | 'schoolName'
+    | 'idCard'
+    | 'phoneNumber'
+    | 'sex'
+    | 'stuName'
+    | 'birthDate'
+    | 'id'
+    | 'hasCousin'
+    | 'schoolName'
+    | 'relateWay'
+    | 'familyId'
+    | 'familyName'
   >
 >;
 
@@ -54,13 +68,27 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         hasCousin: data?.hasCousin ? data.hasCousin?.split(',') : [],
       }}
       onFinish={async (values) => {
+        // relateWay familyId familyName
+        console.log(values, 'values');
+
         const params: FormSubmitProps = {
           ...values,
           idCard: values.idCard?.toUpperCase(),
         };
 
+        // 处理兄妹数据
         if (Array.isArray(values?.hasCousin) && values?.hasCousin?.length > 0) {
           params.hasCousin = values.hasCousin.join(',');
+        }
+
+        // 判断是否为新建家庭还是关联家庭
+        if (values.relateWay) {
+          params.relateWay = values.relateWay;
+          if (values.relateWay === '1') {
+            params.familyId = values.familyId;
+          } else {
+            params.familyName = values.familyName;
+          }
         }
 
         let fn = createStudent;
@@ -172,6 +200,58 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       />
 
       <ProFormText label="就读学校" name="schoolName" colProps={{ span: 12 }} />
+
+      <ProForm.Group>
+        <ProFormRadio.Group
+          label="关联方式"
+          name="relateWay"
+          options={convertObjectToArray(RELATE_WAY)}
+          colProps={{ span: 12 }}
+        />
+
+        <ProFormDependency name={['relateWay']}>
+          {({ relateWay }) => {
+            return relateWay ? (
+              relateWay === '1' ? (
+                <ProFormSelect
+                  placeholder="请选择关联家庭"
+                  colProps={{ span: 12 }}
+                  request={async (params) => {
+                    const { keyWords } = params;
+
+                    if (keyWords) {
+                      // 查询家庭
+                      const res = await query({
+                        familyName: keyWords,
+                      });
+
+                      return res?.data?.list?.map((item: any) => ({
+                        label: item.familyName,
+                        value: item.id,
+                      }));
+                    }
+
+                    return [];
+                  }}
+                  debounceTime={400}
+                  label="关联家庭"
+                  name="familyId"
+                  rules={[{ required: true, message: '关联家庭必选' }]}
+                  showSearch
+                />
+              ) : (
+                <ProFormText
+                  label="家庭名称"
+                  name="familyName"
+                  colProps={{ span: 12 }}
+                  placeholder="请输入家庭名称"
+                  rules={[{ required: true, message: '家庭名称必填' }]}
+                />
+              )
+            ) : null;
+          }}
+        </ProFormDependency>
+      </ProForm.Group>
     </ModalForm>
   );
 };

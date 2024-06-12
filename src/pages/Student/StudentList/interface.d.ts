@@ -13,5 +13,8 @@ export interface TableListItemProps {
   schoolName: string;
   familyId: string;
   isMain: number;
+  relateWay: string;
+  familyId: string;
+  familyName: string;
   [keys: string]: any;
 }
