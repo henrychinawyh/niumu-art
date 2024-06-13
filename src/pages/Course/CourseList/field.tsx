@@ -14,17 +14,17 @@ export const useInitColumns: any = (
       dataIndex: 'name',
     },
     {
+      title: '课程学员人数(人)',
+      dataIndex: 'courseStuTotal',
+      hideInSearch: true,
+    },
+    {
       title: '创建时间',
       dataIndex: 'createTs',
       valueType: 'date',
       hideInSearch: true,
       render: (dom: any, r: TableListItemProps) =>
         r.createTs ? getWholeDateString(r.createTs) : '',
-    },
-    {
-      title: '课程学员人数(人)',
-      dataIndex: 'courseStuTotal',
-      hideInSearch: true,
     },
     {
       title: '操作',

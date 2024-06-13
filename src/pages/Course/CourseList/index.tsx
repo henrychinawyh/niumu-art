@@ -1,7 +1,7 @@
+import { TERM } from '@/utils/constant';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm, Space, Table, message } from 'antd';
-import { uniqBy } from 'lodash';
 import React, { useRef, useState } from 'react';
 import AddGrade from './components/addGrade';
 import CreateOrEdit from './components/createOrEdit';
@@ -80,8 +80,11 @@ const CourseList: React.FC = () => {
   const addGrade = async (values: any) => {
     const { grades } = values || {};
 
-    if (uniqBy(grades, 'name')?.length < grades.length) {
-      message.error('级别名称不能重复');
+    if (
+      Array.from(new Set(grades.map((item: any) => `${item.courseSemester}-${item.name}`)))
+        ?.length < grades.length
+    ) {
+      message.error('学期和级别名称不能重复');
       return;
     }
 
@@ -178,12 +181,32 @@ const CourseList: React.FC = () => {
                 dataSource={expandData?.[record?.id]?.list ? expandData[record?.id].list : []}
                 columns={[
                   {
+                    title: '级别学期',
+                    dataIndex: 'courseSemester',
+                    render: (t: keyof typeof TERM) => (t ? TERM[t] : '-'),
+                  },
+                  {
                     title: '级别名称',
                     dataIndex: 'label',
                   },
                   {
                     title: '级别学员人数',
                     dataIndex: 'gradeStuTotal',
+                    render: (t) => t || '-',
+                  },
+                  {
+                    title: '级别课时',
+                    dataIndex: 'courseCount',
+                    render: (t) => `${t || '-'}课时`,
+                  },
+                  {
+                    title: '级别价格(元)',
+                    dataIndex: 'courseOriginPrice',
+                  },
+                  {
+                    title: '课程单价(元/节)',
+                    dataIndex: 'eachCoursePrice',
+                    render: (t) => t || '-',
                   },
                   {
                     title: '操作',
@@ -199,6 +222,9 @@ const CourseList: React.FC = () => {
                                 id: r.value,
                                 name: r.label,
                                 courseId: record.id,
+                                courseSemester: r.courseSemester,
+                                courseCount: r.courseCount,
+                                courseOriginPrice: Number(r.courseOriginPrice),
                               });
                             }}
                           >

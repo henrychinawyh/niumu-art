@@ -2,7 +2,15 @@
  * @name 新增级别
  */
 
-import { ModalForm, ProForm, ProFormList, ProFormText } from '@ant-design/pro-components';
+import { convertObjectToArray } from '@/utils';
+import { TERM } from '@/utils/constant';
+import {
+  ModalForm,
+  ProFormGroup,
+  ProFormList,
+  ProFormSelect,
+  ProFormText,
+} from '@ant-design/pro-components';
 import { Form } from 'antd';
 import React from 'react';
 
@@ -23,7 +31,7 @@ const AddGrade: React.FC<IProps> = (props) => {
 
   return (
     <ModalForm<FormSubmitProps>
-      width={500}
+      width={800}
       title={title}
       modalProps={{
         onCancel: () => {
@@ -42,33 +50,65 @@ const AddGrade: React.FC<IProps> = (props) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
+          width: '100%',
         }}
       >
         <h4>新增级别</h4>
-        <ProForm.Group>
-          <ProFormList
-            name="grades"
-            creatorButtonProps={{
-              position: 'bottom',
-              creatorButtonText: '新建一行',
-            }}
-            copyIconProps={false}
-          >
-            <ProForm.Group key="gradeNames">
-              <ProFormText
-                placeholder={'请输入级别名称'}
-                name="name"
-                labelCol={{ span: 0 }}
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入级别名称',
-                  },
-                ]}
-              />
-            </ProForm.Group>
-          </ProFormList>
-        </ProForm.Group>
+        <ProFormList
+          name="grades"
+          creatorButtonProps={{
+            position: 'bottom',
+            creatorButtonText: '新建一行',
+          }}
+          copyIconProps={false}
+        >
+          <ProFormGroup key="gradeNames">
+            <ProFormSelect
+              options={convertObjectToArray(TERM)}
+              name="courseSemester"
+              initialValue="1"
+              colProps={{ span: 4 }}
+            />
+            <ProFormText
+              placeholder={'请输入级别名称'}
+              name="name"
+              labelCol={{ span: 0 }}
+              rules={[
+                {
+                  required: true,
+                  message: '请输入级别名称',
+                },
+              ]}
+              colProps={{ span: 8 }}
+            />
+
+            <ProFormText
+              name="courseOriginPrice"
+              placeholder="请输入课程价格"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入课程价格',
+                },
+              ]}
+              labelCol={{ span: 0 }}
+              colProps={{ span: 6 }}
+            />
+
+            <ProFormText
+              name="courseCount"
+              placeholder="请输入课程时数"
+              rules={[
+                {
+                  required: true,
+                  message: '请输入课程时数',
+                },
+              ]}
+              labelCol={{ span: 0 }}
+              colProps={{ span: 6 }}
+            />
+          </ProFormGroup>
+        </ProFormList>
       </div>
     </ModalForm>
   );

@@ -17,3 +17,10 @@ export const YES_OR_NO = {
   0: '否',
   1: '是',
 };
+
+// 学期
+export const TERM = {
+  1: '春季',
+  2: '暑期',
+  3: '秋季',
+};
