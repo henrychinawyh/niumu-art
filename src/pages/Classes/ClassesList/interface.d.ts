@@ -6,6 +6,11 @@ export interface StudentProps {
   remainCourseCount: number;
   payId: number;
   studentId: number;
+  isMember: number;
+  discount: string;
+  accountBalance: string;
+  classId: number;
+  [keys: string]: any;
 }
 
 export interface TableListItemProps {
@@ -20,6 +25,10 @@ export interface TableListItemProps {
   total: number;
   createTs: string;
   studentList?: Array<StudentProps>;
+  courseSemester: number;
+  courseCount: number;
+  eachCoursePrice: string;
+  courseOriginPrice: string;
   [keys: string]: any;
 }
 

@@ -21,8 +21,6 @@ const Attendance: React.FC = () => {
 
   // 查询教师
   const queryTeacher = async (classId: number) => {
-    console.log(classId, 'classId');
-
     const res = await getTeacherByClassId({ classId });
 
     setTeacher(res?.data?.[0]);
@@ -36,7 +34,7 @@ const Attendance: React.FC = () => {
         rowKey={'studentId'}
         manualRequest={true}
         request={async (options) => {
-          if (!options?.subject || options?.subject?.length < 3) {
+          if (!options?.subject || options?.subject?.length < 4) {
             message.error('课程类目需要选择到班级才能查询');
             return {
               success: false,
@@ -51,7 +49,7 @@ const Attendance: React.FC = () => {
           }
 
           const { subject, costTime, current, pageSize } = options;
-          const [courseId, gradeId, classId] = subject || [];
+          const [courseId, courseSemester, gradeId, classId] = subject || [];
 
           const params: any = {
             courseId,
@@ -59,6 +57,7 @@ const Attendance: React.FC = () => {
             classId,
             current,
             pageSize,
+            courseSemester,
           };
 
           const [costTimeStart, costTimeEnd] = getDateStringArray(costTime);

@@ -1,3 +1,5 @@
+import { TERM } from '@/utils/constant';
+import { getWholeDateString } from '@/utils/date';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { ProColumns } from '@ant-design/pro-components';
 import { Button, Popconfirm, Space, message } from 'antd';
@@ -36,12 +38,17 @@ export const useInitColumns: any = (
         expandTrigger: 'hover',
         changeOnSelect: true,
       },
-      width: 100,
     },
     {
       title: '课程名称',
       dataIndex: 'courseName',
       hideInSearch: true,
+      width: 100,
+    },
+    {
+      title: '课程学期',
+      dataIndex: 'courseSemester',
+      valueEnum: TERM,
       width: 100,
     },
     {
@@ -54,7 +61,7 @@ export const useInitColumns: any = (
       title: '班级名称',
       dataIndex: 'className',
       hideInSearch: true,
-      width: 100,
+      width: 120,
     },
     {
       title: '教师名称',
@@ -68,10 +75,18 @@ export const useInitColumns: any = (
       width: 100,
     },
     {
+      title: '创建时间',
+      dataIndex: 'createTs',
+      hideInSearch: true,
+      width: 160,
+      renderText: (t) => (t ? getWholeDateString(t) : ''),
+    },
+    {
       title: '操作',
       dataIndex: 'id',
       valueType: 'option',
-      width: 120,
+      fixed: 'right',
+      width: 320,
       render: (_: any, record: TableListItemProps) =>
         record.status === 99 ? null : (
           <Space>

@@ -1,6 +1,5 @@
 export interface TableListItemProps {
   id: number;
-  familyId: number;
   familyName: string;
   isMember: number;
   discount: number;

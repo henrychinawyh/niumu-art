@@ -4,6 +4,7 @@
 
 import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import React, { useRef, useState } from 'react';
+import { queryList } from '../services';
 import Charge from './components/charge';
 import { useInitColumns } from './field';
 import { ChargeType, TableListItemProps } from './interface';
@@ -16,9 +17,9 @@ const FamilyList: React.FC = () => {
   const [chargeVis, setChargeVis] = useState(false); // 充值弹框
   const [type, setType] = useState<ChargeType>(); // 充值类型
 
-  const columns = useInitColumns((type: ChargeType, data: TableListItemProps) => {
+  const columns = useInitColumns((type: ChargeType, rowData: TableListItemProps) => {
     setType(type);
-    setData(data);
+    setData(rowData);
     setChargeVis(true);
   });
 
@@ -28,20 +29,15 @@ const FamilyList: React.FC = () => {
         actionRef={tableRef}
         formRef={formRef}
         rowKey="id"
-        // request={async (params) => {
-        //   // return {
-        //   //   data: res.code === '000' ? res.data.list : [],
-        //   //   total: res.code === '000' ? res.data.total : 0,
-        //   //   success: res.code === '000',
-        //   // };
+        request={async (params) => {
+          const res = await queryList(params);
 
-        //   return {
-        //     data: [{ id: 1 }],
-        //     total: 1,
-        //     success: true,
-        //   };
-        // }}
-        dataSource={[{ id: 1 }]}
+          return {
+            data: res.data.list,
+            total: res.data.total || 0,
+            success: res.code === '000',
+          };
+        }}
         pagination={{
           defaultPageSize: 10,
         }}
@@ -50,7 +46,18 @@ const FamilyList: React.FC = () => {
         tableAlertRender={false}
       />
 
-      <Charge visible={chargeVis} onCancel={() => setChargeVis(false)} type={type} data={data} />
+      <Charge
+        visible={chargeVis}
+        onCancel={(status) => {
+          if (status) {
+            tableRef.current?.reload();
+          }
+
+          setChargeVis(false);
+        }}
+        type={type}
+        data={data}
+      />
     </div>
   );
 };

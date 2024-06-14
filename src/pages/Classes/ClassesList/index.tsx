@@ -22,7 +22,7 @@ const ClassesList: React.FC = () => {
   const [type, setType] = React.useState<'create' | 'edit'>('create');
   const [detailVis, setDetailVis] = React.useState(false);
 
-  const subjects = useGetAllSubjects();
+  const subjects = useGetAllSubjects(4);
 
   const columns = useInitColumns(
     subjects,
@@ -48,13 +48,19 @@ const ClassesList: React.FC = () => {
         formRef={formRef}
         rowKey="classId"
         request={async (options) => {
-          const { subject, teacherName } = options;
-          const params: any = { teacherName, current: options.current, pageSize: options.pageSize };
+          const { subject, teacherName, courseSemester } = options;
+          const params: any = {
+            teacherName,
+            current: options.current,
+            pageSize: options.pageSize,
+            courseSemester,
+          };
 
           if (Array.isArray(subject)) {
             params.courseId = subject[0];
             params.gradeId = subject[1];
-            params.classId = subject[2];
+            params.courseSemester = subject[2];
+            params.classId = subject[3];
           }
 
           const res = await queryClass(params);

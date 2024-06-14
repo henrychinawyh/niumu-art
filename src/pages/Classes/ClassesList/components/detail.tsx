@@ -3,8 +3,8 @@
  */
 
 import { useCountDownConfirm } from '@/hooks/useConfirmHook';
-import { getYearDiff } from '@/utils';
-import { GENDER } from '@/utils/constant';
+import { getTotalWidth, getYearDiff } from '@/utils';
+import { GENDER, YES_OR_NO } from '@/utils/constant';
 import { getDateString } from '@/utils/date';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Space, Table, Tooltip, message } from 'antd';
@@ -30,28 +30,58 @@ const Detail: React.FC<IProps> = (props) => {
 
   const [confirm, modalContent] = useCountDownConfirm(5);
 
-  const columns = [
+  const columns: any[] = [
     {
       title: '学员名称',
       dataIndex: 'name',
+      width: 90,
     },
     {
       title: '性别',
       dataIndex: 'sex',
       render: (t: keyof typeof GENDER) => GENDER[t] || '',
+      width: 60,
     },
     {
       title: '年龄',
       dataIndex: 'birthDate',
       render: (t: string) => (t ? getYearDiff(t, new Date()) : ''),
+      width: 60,
     },
     {
       title: '剩余课时(节)',
       dataIndex: 'remainCourseCount',
+      render: (t: number) => t ?? '-',
+      width: 110,
+    },
+    {
+      title: '课销费用(￥)',
+      dataIndex: 'payment',
+      render: (t: number) => t ?? '-',
+      width: 110,
+    },
+    {
+      title: '账户余额(￥)',
+      dataIndex: 'accountBalance',
+      width: 110,
+    },
+    {
+      title: '是否会员',
+      dataIndex: 'isMember',
+      render: (t: keyof typeof YES_OR_NO) => YES_OR_NO[t || 0],
+      width: 80,
+    },
+    {
+      title: '会员折扣',
+      dataIndex: 'discount',
+      render: (t: number) => (t < 1 ? `${t * 10}折(${t})` : '无折扣'),
+      width: 90,
     },
     {
       title: '操作',
       dataIndex: 'opt',
+      width: 100,
+      fixed: 'right',
       render: (_: any, record: StudentProps & Pick<TableListItemProps, 'classId'>) => (
         <Space>
           <a
@@ -116,16 +146,9 @@ const Detail: React.FC<IProps> = (props) => {
 
   const rowSelection: TableRowSelection<any> = {
     selectedRowKeys,
-    onChange: (selectedRowKeys: React.Key[], rows: any[]) => {
+    onChange: (selectedRowKeys: React.Key[], rows: TableListItemProps[]) => {
       setSelectedRowKeys(selectedRowKeys);
-      setSelectedRows(
-        rows?.map((item) => ({
-          id: item.id,
-          studentId: item.studentId,
-          remainCourseCount: item.remainCourseCount,
-          payId: item.payId,
-        })),
-      );
+      setSelectedRows(rows);
     },
   };
 
@@ -135,7 +158,7 @@ const Detail: React.FC<IProps> = (props) => {
       maskClosable={false}
       title={`${data?.className}`}
       open={visible}
-      width={700}
+      width={1000}
       cancelButtonProps={{
         style: { display: 'none' },
       }}
@@ -191,11 +214,15 @@ const Detail: React.FC<IProps> = (props) => {
           dataSource={dataSource}
           columns={columns}
           rowSelection={rowSelection}
+          scroll={{
+            x: getTotalWidth(columns),
+          }}
         />
       </Space>
 
       {/* 添加课时弹框 */}
       <AddClassCourse
+        data={data}
         visible={addVisible}
         students={selectedRows}
         onCancel={(refresh) => {

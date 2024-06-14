@@ -1,6 +1,8 @@
 import { YES_OR_NO } from '@/utils/constant';
+import { getWholeDateString } from '@/utils/date';
 import { ProColumns } from '@ant-design/pro-components';
 import { Button } from 'antd';
+import { floor } from 'lodash';
 import { ChargeType, TableListItemProps } from './interface';
 
 export const useInitColumns: any = (
@@ -26,6 +28,7 @@ export const useInitColumns: any = (
       title: '会员折扣',
       dataIndex: 'discount',
       hideInSearch: true,
+      renderText: (t) => (t < 1 ? `${floor(t * 10, 0)}折(${t})` : '无折扣'),
     },
     {
       title: '账户余额',
@@ -36,6 +39,9 @@ export const useInitColumns: any = (
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateRange',
+      render: (dom, r) => {
+        return r.createTime ? getWholeDateString(r.createTime) : '-';
+      },
     },
     {
       title: '最近一次消费时间',

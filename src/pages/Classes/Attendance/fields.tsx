@@ -11,7 +11,7 @@ import React, { useMemo } from 'react';
 import { createAttendance } from './services';
 
 const useInitColumns = (reloadTable: () => void) => {
-  const subjects = useGetAllSubjects();
+  const subjects = useGetAllSubjects(4);
 
   const [selectedRange, setSelectedRange] = React.useState<Array<Moment>>([
     moment().subtract(7, 'days'),
@@ -62,17 +62,25 @@ const useInitColumns = (reloadTable: () => void) => {
         hideInSearch: true,
         width: 100,
         fixed: 'left',
+        render: (_, r) => `${r.studentName}${r.isMember ? '(会员)' : ''}`,
       },
-      {
-        title: '学员总课时(节)',
-        dataIndex: 'paidCourseCount',
-        hideInSearch: true,
-        width: 120,
-        fixed: 'left',
-      },
+      // {
+      //   title: '学员课销(节)',
+      //   dataIndex: 'paidCourseCount',
+      //   hideInSearch: true,
+      //   width: 120,
+      //   fixed: 'left',
+      // },
       {
         title: '剩余课销(节)',
         dataIndex: 'remainCourseCount',
+        hideInSearch: true,
+        width: 100,
+        fixed: 'left',
+      },
+      {
+        title: '课时单价(元)',
+        dataIndex: 'realPrice',
         hideInSearch: true,
         width: 100,
         fixed: 'left',
@@ -82,6 +90,13 @@ const useInitColumns = (reloadTable: () => void) => {
         dataIndex: 'remainCost',
         hideInSearch: true,
         width: 120,
+        fixed: 'left',
+      },
+      {
+        title: '账户余额(元)',
+        dataIndex: 'accountBalance',
+        hideInSearch: true,
+        width: 100,
         fixed: 'left',
       },
     ];

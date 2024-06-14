@@ -103,7 +103,7 @@ export async function editCourseGrade(params: any) {
 }
 
 // 查询所有的课程类目
-export async function getAllSubjects(params: any) {
+export async function getAllSubjects(params?: any) {
   return request(`${prefix}/getAllSubjects`, {
     method: 'POST',
     headers: {

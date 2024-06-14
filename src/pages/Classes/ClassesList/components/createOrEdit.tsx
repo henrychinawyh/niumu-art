@@ -35,10 +35,18 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
 
       if (Array.isArray(data.studentList)) {
         setDefaultStudents(
-          data.studentList.map((item) => ({ label: item.name, value: item.id, disabled: true })),
+          data.studentList.map((item) => ({
+            label: item.name,
+            value: item.studentId,
+            disabled: true,
+          })),
         );
         setStudents(
-          data.studentList.map((item) => ({ label: item.name, value: item.id, disabled: true })),
+          data.studentList.map((item) => ({
+            label: item.name,
+            value: item.studentId,
+            disabled: true,
+          })),
         );
       }
     }
@@ -84,17 +92,21 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       form={form}
       initialValues={{
         name: data?.className,
-        subject: data?.courseId && data?.gradeId ? [data?.courseId, data?.gradeId] : [],
+        subject:
+          data?.courseId && data?.gradeId
+            ? [data?.courseId, data?.gradeId, data?.courseSemester]
+            : [],
         teacherId: data?.teacherId,
-        studentIds: data?.studentList?.map((item) => item.id) || [],
+        studentIds: data?.studentList?.map((item) => item.studentId) || [],
       }}
       onFinish={async (values: any) => {
-        const [courseId, gradeId] = values.subject || [];
+        const [courseId, gradeId, courseSemester] = values.subject || [];
 
         const params: Partial<CreateClassParams> = {
           ...values,
           courseId,
           gradeId,
+          courseSemester,
         };
 
         delete (params as any).subject;
@@ -107,7 +119,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
 
         try {
           const res = await fn(params);
-          if (res) {
+          if (res.data) {
             message.success('提交成功');
             onCancel(true);
           }
@@ -155,13 +167,14 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
             }
 
             setTeachers([]);
+            form.setFieldsValue({
+              teacherId: undefined,
+            });
           },
           disabled: type === 'edit',
         }}
         request={async () => {
-          const res = await getAllSubjects({
-            layer: 2,
-          });
+          const res = await getAllSubjects();
 
           return res?.data || [];
         }}
