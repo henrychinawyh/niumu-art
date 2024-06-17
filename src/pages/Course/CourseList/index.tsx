@@ -1,13 +1,14 @@
 import { TERM } from '@/utils/constant';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
-import { Button, Popconfirm, Space, Table, message } from 'antd';
+import { Button, Card, Popconfirm, Space, Table, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import AddGrade from './components/addGrade';
 import CreateOrEdit from './components/createOrEdit';
 import type { CourseGradeProps } from './components/editGradeName';
 import EditGradeName from './components/editGradeName';
 import { useInitColumns } from './field';
+import styles from './index.less';
 import { GradeItemProps, TableListItemProps } from './interface';
 import {
   addCourseGrade,
@@ -171,86 +172,115 @@ const CourseList: React.FC = () => {
         expandable={{
           expandedRowKeys,
           expandedRowRender: (record: TableListItemProps) => {
+            let category = new Array(3);
+            expandData?.[record?.id]?.list?.forEach((item: any) => {
+              const { courseSemester } = item || {};
+
+              if (Array.isArray(category[courseSemester - 1])) {
+                category[courseSemester - 1].push(item);
+              } else {
+                category[courseSemester - 1] = [item];
+              }
+            });
+
             return (
-              <Table
-                rowKey={'value'}
-                size="small"
-                pagination={{
-                  total: expandData?.[record?.id]?.total || 0,
+              <Space
+                style={{
+                  width: '100%',
+                  padding: 12,
                 }}
-                dataSource={expandData?.[record?.id]?.list ? expandData[record?.id].list : []}
-                columns={[
-                  {
-                    title: '级别学期',
-                    dataIndex: 'courseSemester',
-                    render: (t: keyof typeof TERM) => (t ? TERM[t] : '-'),
-                  },
-                  {
-                    title: '级别名称',
-                    dataIndex: 'label',
-                  },
-                  {
-                    title: '级别学员人数',
-                    dataIndex: 'gradeStuTotal',
-                    render: (t) => t || '-',
-                  },
-                  {
-                    title: '级别课时',
-                    dataIndex: 'courseCount',
-                    render: (t) => `${t || '-'}课时`,
-                  },
-                  {
-                    title: '级别价格(元)',
-                    dataIndex: 'courseOriginPrice',
-                  },
-                  {
-                    title: '课程单价(元/节)',
-                    dataIndex: 'eachCoursePrice',
-                    render: (t) => t || '-',
-                  },
-                  {
-                    title: '操作',
-                    dataIndex: 'opt',
-                    render: (t: string, r: GradeItemProps) => {
-                      return (
-                        <Space>
-                          <Button
-                            type="link"
-                            icon={<EditOutlined />}
-                            onClick={() => {
-                              editGrade({
-                                id: r.value,
-                                name: r.label,
-                                courseId: record.id,
-                                courseSemester: r.courseSemester,
-                                courseCount: r.courseCount,
-                                courseOriginPrice: Number(r.courseOriginPrice),
-                              });
-                            }}
-                          >
-                            编辑
-                          </Button>
-                          {r.gradeStuTotal <= 0 && (
-                            <Popconfirm
-                              title="确认删除级别"
-                              onConfirm={() =>
-                                delGrade({
-                                  gradeId: r.value,
-                                  courseId: record.id,
-                                })
-                              }
-                            >
-                              <Button type="link" icon={<DeleteOutlined />} danger>
-                                删除
-                              </Button>
-                            </Popconfirm>
-                          )}
-                        </Space>
-                      );
-                    },
-                  },
-                ]}
-              />
+                direction="vertical"
+                size={15}
+                className={styles.expandTable}
+              >
+                {category?.map((item) => (
+                  <Card
+                    title={TERM[item?.[0]?.courseSemester as keyof typeof TERM]}
+                    key={item?.[0]?.courseSemester}
+                    bordered={false}
+                  >
+                    <Table
+                      rowKey={'value'}
+                      size="small"
+                      // pagination={{
+                      //   total: expandData?.[record?.id]?.total || 0,
+                      // }}
+                      dataSource={item || []}
+                      columns={[
+                        // {
+                        //   title: '级别学期',
+                        //   dataIndex: 'courseSemester',
+                        //   render: (t: keyof typeof TERM) => (t ? TERM[t] : '-'),
+                        // },
+                        {
+                          title: '级别名称',
+                          dataIndex: 'label',
+                        },
+                        {
+                          title: '级别学员人数',
+                          dataIndex: 'gradeStuTotal',
+                          render: (t) => t || '-',
+                        },
+                        {
+                          title: '级别课时',
+                          dataIndex: 'courseCount',
+                          render: (t) => `${t || '-'}课时`,
+                        },
+                        {
+                          title: '级别价格(元)',
+                          dataIndex: 'courseOriginPrice',
+                        },
+                        {
+                          title: '课程单价(元/节)',
+                          dataIndex: 'eachCoursePrice',
+                          render: (t) => t || '-',
+                        },
+                        {
+                          title: '操作',
+                          dataIndex: 'opt',
+                          render: (t: string, r: GradeItemProps) => {
+                            return (
+                              <Space>
+                                <Button
+                                  type="link"
+                                  icon={<EditOutlined />}
+                                  onClick={() => {
+                                    editGrade({
+                                      id: r.value,
+                                      name: r.label,
+                                      courseId: record.id,
+                                      courseSemester: r.courseSemester,
+                                      courseCount: r.courseCount,
+                                      courseOriginPrice: Number(r.courseOriginPrice),
+                                    });
+                                  }}
+                                >
+                                  编辑
+                                </Button>
+                                {r.gradeStuTotal <= 0 && (
+                                  <Popconfirm
+                                    title="确认删除级别"
+                                    onConfirm={() =>
+                                      delGrade({
+                                        gradeId: r.value,
+                                        courseId: record.id,
+                                      })
+                                    }
+                                  >
+                                    <Button type="link" icon={<DeleteOutlined />} danger>
+                                      删除
+                                    </Button>
+                                  </Popconfirm>
+                                )}
+                              </Space>
+                            );
+                          },
+                        },
+                      ]}
+                    />
+                  </Card>
+                ))}
+              </Space>
             );
           },
           onExpand: (expandable, record) => {

@@ -46,7 +46,7 @@ const useInitColumns = (reloadTable: () => void) => {
         fieldProps: {
           disabledDate: (current: Moment, { from }: { from: Moment }) => {
             if (from) {
-              return Math.abs(current.diff(from, 'days')) >= 14;
+              return Math.abs(current.diff(from, 'days')) >= 30;
             }
 
             return false;
@@ -64,13 +64,6 @@ const useInitColumns = (reloadTable: () => void) => {
         fixed: 'left',
         render: (_, r) => `${r.studentName}${r.isMember ? '(会员)' : ''}`,
       },
-      // {
-      //   title: '学员课销(节)',
-      //   dataIndex: 'paidCourseCount',
-      //   hideInSearch: true,
-      //   width: 120,
-      //   fixed: 'left',
-      // },
       {
         title: '剩余课销(节)',
         dataIndex: 'remainCourseCount',
@@ -89,7 +82,7 @@ const useInitColumns = (reloadTable: () => void) => {
         title: '剩余课销费用(元)',
         dataIndex: 'remainCost',
         hideInSearch: true,
-        width: 120,
+        width: 130,
         fixed: 'left',
       },
       {

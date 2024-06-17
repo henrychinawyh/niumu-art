@@ -30,6 +30,9 @@ interface CreateClassCourseParams<T> {
   eachCoursePrice: T;
   discount: T;
   students: Array<StudentProps>;
+  studentId: T;
+  accountBalance: T;
+  studentName: T;
 }
 
 interface AddClassCourseProps {
@@ -44,8 +47,6 @@ const AddClassCourse: React.FC<AddClassCourseProps> = (props) => {
   const { students, visible, onCancel, data } = props;
 
   const [form] = Form.useForm();
-
-  console.log(students, data);
 
   return (
     <ModalForm<SubmitProps<StringOrNumber>>
@@ -83,7 +84,6 @@ const AddClassCourse: React.FC<AddClassCourseProps> = (props) => {
         })),
       }}
       onValuesChange={(changeValues, values) => {
-        console.log(changeValues, values);
         if (Array.isArray(changeValues?.courses) && changeValues.courses.length > 0) {
           const index = changeValues.courses.findIndex(
             (item: CreateClassCourseParams<StringOrNumber>) => !!item,
@@ -104,6 +104,25 @@ const AddClassCourse: React.FC<AddClassCourseProps> = (props) => {
         }
       }}
       onFinish={async (values: SubmitProps<StringOrNumber>) => {
+        let disabledArr: string[] = [];
+
+        values.courses.forEach((item: CreateClassCourseParams<StringOrNumber>) => {
+          const accountBalance = students?.filter(
+            (student) => +student.studentId === +item.studentId,
+          )?.[0]?.accountBalance;
+
+          if (+accountBalance < +item.payment) {
+            disabledArr.push(item.studentName as string);
+          }
+        });
+
+        if (disabledArr.length > 0) {
+          message.error(
+            `以下学员（${disabledArr.join(',')}）余额不足，请调整学员课时或调整学员账户余额`,
+          );
+          return false;
+        }
+
         const res = await addCourseClass(values);
 
         if (res?.data?.data) {
