@@ -100,7 +100,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         studentIds: data?.studentList?.map((item) => item.studentId) || [],
       }}
       onFinish={async (values: any) => {
-        const [courseId, gradeId, courseSemester] = values.subject || [];
+        const [courseId, courseSemester, gradeId] = values.subject || [];
 
         const params: Partial<CreateClassParams> = {
           ...values,

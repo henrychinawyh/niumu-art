@@ -14,6 +14,7 @@ import React, { useEffect } from 'react';
 import { StudentProps, TableListItemProps } from '../interface';
 import { deleteStudentOfClass, hasRemianCourseCount } from '../services';
 import AddClassCourse from './addClassCourse';
+import SwitchClass from './switchClass';
 
 interface IProps {
   visible: boolean;
@@ -26,7 +27,13 @@ const Detail: React.FC<IProps> = (props) => {
   const [dataSource, setDataSource] = React.useState<any[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = React.useState<React.Key[]>([]);
   const [selectedRows, setSelectedRows] = React.useState<any[]>([]);
+
+  // 添加课时
   const [addVisible, setAddVisible] = React.useState<boolean>(false);
+
+  // 转班
+  const [switchVisible, setSwitchVisible] = React.useState<boolean>(false);
+  const [switchData, setSwitchData] = React.useState({});
 
   const [confirm, modalContent] = useCountDownConfirm(5);
 
@@ -84,6 +91,19 @@ const Detail: React.FC<IProps> = (props) => {
       fixed: 'right',
       render: (_: any, record: StudentProps & Pick<TableListItemProps, 'classId'>) => (
         <Space>
+          <a
+            onClick={() => {
+              setSwitchVisible(true);
+              setSwitchData({
+                ...record,
+                courseId: data?.courseId,
+                courseSemester: data?.courseSemester,
+                gradeId: data?.gradeId,
+              });
+            }}
+          >
+            转班
+          </a>
           <a
             onClick={async () => {
               const count = await hasRemianCourseCount({
@@ -238,6 +258,24 @@ const Detail: React.FC<IProps> = (props) => {
 
       {/* 确认是否要删除学员弹框 */}
       {modalContent}
+
+      {/* 转班 */}
+      {switchVisible && (
+        <SwitchClass
+          onCancel={(refresh) => {
+            setSwitchVisible(false);
+            if (refresh) {
+              onCancel?.(refresh);
+            }
+          }}
+          onOk={(data) => {
+            setSwitchVisible(false);
+            onCancel?.(data);
+          }}
+          data={switchData}
+          visible={switchVisible}
+        />
+      )}
     </Modal>
   );
 };

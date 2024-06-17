@@ -112,3 +112,14 @@ export async function getAllSubjects(params?: any) {
     data: params,
   });
 }
+
+// 查询课程-季度-级别详细信息
+export async function getCourseDetail(params?: any) {
+  return request(`${prefix}/getCourseDetail`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
