@@ -93,3 +93,14 @@ export async function addCourseClass(params?: any) {
     data: params,
   });
 }
+
+// 转班操作
+export async function changeClass(params?: any) {
+  return request(`${prefix}/changeClass`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}

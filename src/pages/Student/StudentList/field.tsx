@@ -2,7 +2,7 @@ import FormatDate from '@/components/Date/FormatDate';
 import { GENDER, RELATIONSHIP } from '@/utils/constant';
 import { getDateString } from '@/utils/date';
 import { ProColumns } from '@ant-design/pro-components';
-import { Button, Popconfirm, Select } from 'antd';
+import { Button, Popconfirm, Select, Space } from 'antd';
 import { debounce } from 'lodash';
 import { useState } from 'react';
 import { TableListItemProps } from './interface';
@@ -12,6 +12,7 @@ export const useInitColumns: any = (
   editFn?: (data: TableListItemProps) => void,
   deleteFn?: (data: TableListItemProps) => void,
   relateFamilyFn?: (data: TableListItemProps) => void,
+  consumeRecordFn?: (data: TableListItemProps) => void,
 ) => {
   const [options, setOptions] = useState([]);
 
@@ -40,6 +41,7 @@ export const useInitColumns: any = (
     {
       title: '学员姓名',
       dataIndex: 'stuName',
+      width: 80,
       renderFormItem: () => {
         return (
           <Select
@@ -54,18 +56,27 @@ export const useInitColumns: any = (
       },
     },
     {
+      title: '所在家庭',
+      dataIndex: 'familyName',
+      hideInSearch: true,
+      width: 120,
+    },
+    {
       title: '手机号',
       dataIndex: 'phoneNumber',
       hideInSearch: true,
+      width: 110,
     },
     {
       title: '性别',
       dataIndex: 'sex',
       valueEnum: GENDER,
+      width: 60,
     },
     {
       title: '身份证号',
       dataIndex: 'idCard',
+      width: 170,
     },
     {
       title: '是否有兄妹',
@@ -80,11 +91,13 @@ export const useInitColumns: any = (
           return '--';
         }
       },
+      width: 100,
     },
     {
       title: '就读学校',
       dataIndex: 'schoolName',
       hideInSearch: true,
+      width: 100,
     },
     {
       title: '状态',
@@ -102,27 +115,32 @@ export const useInitColumns: any = (
       dataIndex: 'birthDate',
       hideInSearch: true,
       render: (t: any) => (t ? getDateString(t) : ''),
+      width: 100,
     },
     {
       title: '创建时间',
       dataIndex: 'createTs',
       hideInSearch: true,
       renderText: (t: any) => <FormatDate time={t} />,
+      width: 100,
     },
     {
       title: '更新时间',
       dataIndex: 'updateTs',
       hideInSearch: true,
       renderText: (t: any) => <FormatDate time={t} />,
+      width: 100,
     },
     {
       title: '操作',
       dataIndex: 'id',
       valueType: 'option',
+      fixed: 'right',
+      width: 160,
       render: (_: any, record: TableListItemProps) =>
-        record.status === 99
-          ? null
-          : [
+        record.status === 99 ? null : (
+          <Space direction="vertical">
+            <div>
               <Button
                 key="edit"
                 type="link"
@@ -132,19 +150,7 @@ export const useInitColumns: any = (
                 }}
               >
                 编辑
-              </Button>,
-              !record.familyId && (
-                <Button
-                  key="relateFamily"
-                  type="link"
-                  size="small"
-                  onClick={() => {
-                    relateFamilyFn?.(record);
-                  }}
-                >
-                  关联家庭
-                </Button>
-              ),
+              </Button>
               <Popconfirm
                 key="delete"
                 title="请确认是否要删除此位学员？"
@@ -155,8 +161,33 @@ export const useInitColumns: any = (
                 <Button type="link" danger size="small">
                   删除
                 </Button>
-              </Popconfirm>,
-            ],
+              </Popconfirm>
+            </div>
+            <div>
+              {!record.familyId && (
+                <Button
+                  key="relateFamily"
+                  type="link"
+                  size="small"
+                  onClick={() => {
+                    relateFamilyFn?.(record);
+                  }}
+                >
+                  关联家庭
+                </Button>
+              )}
+              <Button
+                type="link"
+                size="small"
+                onClick={() => {
+                  consumeRecordFn?.(record);
+                }}
+              >
+                消费记录
+              </Button>
+            </div>
+          </Space>
+        ),
     },
   ];
 

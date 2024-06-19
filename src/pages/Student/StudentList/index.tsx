@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { downloadExcel } from '@/utils';
+import { downloadExcel, getTotalWidth } from '@/utils';
 import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm, message } from 'antd';
 import React, { useRef, useState } from 'react';
+import CheckConsumeRecord from './components/checkConsumeRecord';
 import CreateOrEdit from './components/createOrEdit';
+import ExtraCost from './components/extraCost';
 import RelateFamily from './components/relateFamily';
 import { useInitColumns } from './field';
 import { TableListItemProps } from './interface';
@@ -22,6 +24,12 @@ const StudentList: React.FC = () => {
   // 关联家庭
   const [relateVis, setRelateVis] = useState(false);
 
+  // 批量课外消费
+  const [extraVis, setExtraVis] = useState(false);
+
+  // 查看消费记录
+  const [consumeVis, setConsumeVis] = useState(false);
+
   const columns = useInitColumns(
     (data: TableListItemProps) => {
       setVisible(true);
@@ -39,6 +47,10 @@ const StudentList: React.FC = () => {
     },
     (data: TableListItemProps) => {
       setRelateVis(true);
+      setData(data);
+    },
+    (data: TableListItemProps) => {
+      setConsumeVis(true);
       setData(data);
     },
   );
@@ -95,6 +107,9 @@ const StudentList: React.FC = () => {
         pagination={{
           defaultPageSize: 10,
         }}
+        scroll={{
+          x: getTotalWidth(columns),
+        }}
         columns={columns}
         toolBarRender={() => [
           <Button
@@ -127,6 +142,19 @@ const StudentList: React.FC = () => {
           </Popconfirm>,
           <Button key="export" onClick={exportStudents}>
             导出学员
+          </Button>,
+          <Button
+            key="export"
+            disabled={!selectedRows.length}
+            onClick={() => {
+              if (selectedRows.every((item) => item.familyId)) {
+                setExtraVis(true);
+              } else {
+                message.error('请确认选中的学员中是否都关联了家庭');
+              }
+            }}
+          >
+            批量课外消费
           </Button>,
         ]}
         options={false}
@@ -164,6 +192,30 @@ const StudentList: React.FC = () => {
           }}
           visible={relateVis}
           data={data}
+        />
+      )}
+
+      {/* 批量课外消费 */}
+      {extraVis && (
+        <ExtraCost
+          visible={extraVis}
+          onCancel={(status) => {
+            setExtraVis(false);
+            if (status) {
+              tableRef.current?.reload();
+            }
+          }}
+          datas={selectedRows}
+        />
+      )}
+
+      {/* 查看消费记录 */}
+      {consumeVis && (
+        <CheckConsumeRecord
+          visible={consumeVis}
+          data={data}
+          type="student"
+          onCancel={() => setConsumeVis(false)}
         />
       )}
     </div>

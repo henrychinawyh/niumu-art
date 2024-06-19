@@ -2,7 +2,9 @@
  * @name 家庭列表
  */
 
+import CheckConsumeRecord from '@/pages/Student/StudentList/components/checkConsumeRecord';
 import { ActionType, ProFormInstance, ProTable } from '@ant-design/pro-components';
+import { omit } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { queryList } from '../services';
 import Charge from './components/charge';
@@ -17,11 +19,23 @@ const FamilyList: React.FC = () => {
   const [chargeVis, setChargeVis] = useState(false); // 充值弹框
   const [type, setType] = useState<ChargeType>(); // 充值类型
 
-  const columns = useInitColumns((type: ChargeType, rowData: TableListItemProps) => {
-    setType(type);
-    setData(rowData);
-    setChargeVis(true);
-  });
+  const columns = useInitColumns(
+    (type: ChargeType, rowData: TableListItemProps) => {
+      setType(type);
+      setData(rowData);
+      setChargeVis(true);
+    },
+    (data: TableListItemProps) => {
+      setConsumeVis(true);
+      setData({
+        ...omit(data, ['id']),
+        familyId: data?.id,
+      });
+    },
+  );
+
+  // 查看消费记录
+  const [consumeVis, setConsumeVis] = useState(false);
 
   return (
     <div>
@@ -46,6 +60,7 @@ const FamilyList: React.FC = () => {
         tableAlertRender={false}
       />
 
+      {/* 充值或办理会员 */}
       <Charge
         visible={chargeVis}
         onCancel={(status) => {
@@ -57,6 +72,14 @@ const FamilyList: React.FC = () => {
         }}
         type={type}
         data={data}
+      />
+
+      {/* 查看消费记录 */}
+      <CheckConsumeRecord
+        data={data}
+        type="family"
+        visible={consumeVis}
+        onCancel={() => setConsumeVis(false)}
       />
     </div>
   );

@@ -16,5 +16,7 @@ export interface TableListItemProps {
   relateWay: string;
   familyId: string;
   familyName: string;
+  isMember: number;
+  discount: string;
   [keys: string]: any;
 }

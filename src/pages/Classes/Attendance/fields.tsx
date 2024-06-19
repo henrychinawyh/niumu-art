@@ -110,6 +110,11 @@ const useInitColumns = (reloadTable: () => void) => {
             onCell: (record) => {
               return {
                 onDoubleClick: () => {
+                  if (record?.accountBalance < record?.realPrice) {
+                    message.error('账户余额不足，不能销课，请充值');
+                    return;
+                  }
+
                   if (record?.remainCourseCount === 0) {
                     message.warning('该学员已无剩余课销，无法考勤');
                     return;
@@ -124,7 +129,7 @@ const useInitColumns = (reloadTable: () => void) => {
                     title: `考勤编辑`,
                     content: (
                       <div>
-                        确认学员
+                        确认学员&nbsp;
                         <span
                           style={{
                             color: '#ff4d4f',
@@ -133,7 +138,8 @@ const useInitColumns = (reloadTable: () => void) => {
                         >
                           {record.studentName}
                         </span>
-                        已上课？
+                        &nbsp; 已在 <span style={{ color: '#ff4d4f', fontWeight: 600 }}>{day}</span>{' '}
+                        上课？
                       </div>
                     ),
                     okText: '已确认',
@@ -145,6 +151,13 @@ const useInitColumns = (reloadTable: () => void) => {
                         classId: record.classId,
                         attendDate: moment(day).format('YYYY-MM-DD HH:mm:ss'),
                         payId: record.payId,
+                        familyId: record.familyId,
+                        discount: record.discount,
+                        isMember: record.isMember,
+                        realPrice: record.realPrice,
+                        consumeDetail: '销课',
+                        originPrice: record.originPrice,
+                        consumeNum: 1,
                       };
 
                       const res = await createAttendance(params);

@@ -43,11 +43,13 @@ export const getTotalWidth = (columns: ProColumns<any>[]) => {
   let total = 0;
 
   if (Array.isArray(columns)) {
-    columns.forEach((item: any, index) => {
-      if (index !== columns.length - 1) {
-        total += item?.width;
-      }
-    });
+    columns
+      .filter((item) => !!item.width)
+      .forEach((item: any, index) => {
+        if (index !== columns.length - 1) {
+          total += item?.width;
+        }
+      });
     return `${total}px`;
   }
 

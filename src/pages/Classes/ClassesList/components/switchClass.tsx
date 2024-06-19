@@ -13,6 +13,7 @@ import {
 import { Form, Space, message } from 'antd';
 import { floor } from 'lodash';
 import { useState } from 'react';
+import { changeClass } from '../services';
 
 interface IProps {
   visible: boolean;
@@ -23,13 +24,15 @@ interface IProps {
 }
 
 const SwitchClass: React.FC<IProps> = (props) => {
-  const { onCancel, onOk, visible, data } = props;
+  const { onCancel, visible, data } = props;
   const [form] = Form.useForm();
   const subjects = useGetAllSubjects(4);
   const [courseDetail, setCourseDetail] = useState<any>(null); // 课程详情
 
   const [canSwitch, setCanSwitch] = useState<boolean>(true); // 是否可以转班
+  const [loading, setLoading] = useState(false);
 
+  // 查询转班的班级信息
   const queryCourseDetail = async (params: any) => {
     //  查询课程详情
     const res = await getCourseDetail(params);
@@ -42,8 +45,16 @@ const SwitchClass: React.FC<IProps> = (props) => {
     }
   };
 
-  // console.log(data, courseDetail);
-  console.log(canSwitch);
+  // 转班操作
+  const onOk = async (data: any) => {
+    setLoading(true);
+    const res = await changeClass(data);
+    setLoading(false);
+    if (res.data) {
+      message.success('转班成功');
+      onCancel?.(true);
+    }
+  };
 
   return (
     <ModalForm
@@ -51,16 +62,34 @@ const SwitchClass: React.FC<IProps> = (props) => {
       form={form}
       open={visible}
       modalProps={{
-        destroyOnClose: true,
+        destroyOnClose: false,
         maskClosable: false,
         onCancel: () => {
           onCancel?.();
         },
         width: 400,
+        confirmLoading: loading,
       }}
       onFinish={async (values) => {
         if (canSwitch) {
-          onOk?.(values);
+          const { courseCount, subject } = values || {};
+          const [courseId, courseSemester, gradeId, classId] = subject;
+
+          onOk?.({
+            courseCount,
+            courseId,
+            courseSemester,
+            gradeId,
+            classId,
+            studentId: data?.studentId,
+            studentClassId: data?.id,
+            payId: data?.payId,
+            payment:
+              +courseCount *
+              courseDetail?.eachCoursePrice *
+              (data?.isMember === 1 ? +data.discount : 1),
+            realPrice: courseDetail?.eachCoursePrice,
+          });
         } else {
           message.error('账户余额不足，请先充值账户余额或减少课时数量');
           return false;
@@ -79,15 +108,6 @@ const SwitchClass: React.FC<IProps> = (props) => {
             () => ({
               validator(_, value) {
                 if (Array.isArray(value) && value.length === 4) {
-                  console.log(JSON.stringify(value));
-                  console.log(
-                    JSON.stringify([
-                      data?.courseId,
-                      data?.courseSemester,
-                      data?.gradeId,
-                      data?.classId,
-                    ]),
-                  );
                   if (
                     value?.join(',') ===
                     [data?.courseId, data?.courseSemester, data?.gradeId, data?.classId].join(',')
@@ -144,10 +164,7 @@ const SwitchClass: React.FC<IProps> = (props) => {
                     2,
                   );
 
-                  if (price > data?.accountBalance) {
-                    console.log(1);
-                    setCanSwitch(false);
-                  }
+                  setCanSwitch(price <= +data?.accountBalance);
                 }
 
                 return (

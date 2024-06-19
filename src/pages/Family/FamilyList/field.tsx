@@ -7,6 +7,7 @@ import { ChargeType, TableListItemProps } from './interface';
 
 export const useInitColumns: any = (
   chargeFn: (type: ChargeType, data: TableListItemProps) => void,
+  consumeFn: (data: TableListItemProps) => void,
 ) => {
   const columns: ProColumns<TableListItemProps>[] = [
     {
@@ -72,6 +73,15 @@ export const useInitColumns: any = (
           }}
         >
           充值账户
+        </Button>,
+        <Button
+          type="link"
+          key="consume"
+          onClick={() => {
+            consumeFn(record);
+          }}
+        >
+          消费记录
         </Button>,
       ],
     },

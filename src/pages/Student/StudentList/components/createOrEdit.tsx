@@ -58,7 +58,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         destroyOnClose: true,
         maskClosable: false,
       }}
-      visible={visible}
+      open={visible}
       autoFocusFirstInput
       form={form}
       initialValues={{
@@ -201,57 +201,59 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
 
       <ProFormText label="就读学校" name="schoolName" colProps={{ span: 12 }} />
 
-      <ProForm.Group>
-        <ProFormRadio.Group
-          label="关联方式"
-          name="relateWay"
-          options={convertObjectToArray(RELATE_WAY)}
-          colProps={{ span: 12 }}
-        />
+      {type === 'create' && (
+        <ProForm.Group>
+          <ProFormRadio.Group
+            label="关联方式"
+            name="relateWay"
+            options={convertObjectToArray(RELATE_WAY)}
+            colProps={{ span: 12 }}
+          />
 
-        <ProFormDependency name={['relateWay']}>
-          {({ relateWay }) => {
-            return relateWay ? (
-              relateWay === '1' ? (
-                <ProFormSelect
-                  placeholder="请选择关联家庭"
-                  colProps={{ span: 12 }}
-                  request={async (params) => {
-                    const { keyWords } = params;
+          <ProFormDependency name={['relateWay']}>
+            {({ relateWay }) => {
+              return relateWay ? (
+                relateWay === '1' ? (
+                  <ProFormSelect
+                    placeholder="请选择关联家庭"
+                    colProps={{ span: 12 }}
+                    request={async (params) => {
+                      const { keyWords } = params;
 
-                    if (keyWords) {
-                      // 查询家庭
-                      const res = await query({
-                        familyName: keyWords,
-                      });
+                      if (keyWords) {
+                        // 查询家庭
+                        const res = await query({
+                          familyName: keyWords,
+                        });
 
-                      return res?.data?.list?.map((item: any) => ({
-                        label: item.familyName,
-                        value: item.id,
-                      }));
-                    }
+                        return res?.data?.list?.map((item: any) => ({
+                          label: item.familyName,
+                          value: item.id,
+                        }));
+                      }
 
-                    return [];
-                  }}
-                  debounceTime={400}
-                  label="关联家庭"
-                  name="familyId"
-                  rules={[{ required: true, message: '关联家庭必选' }]}
-                  showSearch
-                />
-              ) : (
-                <ProFormText
-                  label="家庭名称"
-                  name="familyName"
-                  colProps={{ span: 12 }}
-                  placeholder="请输入家庭名称"
-                  rules={[{ required: true, message: '家庭名称必填' }]}
-                />
-              )
-            ) : null;
-          }}
-        </ProFormDependency>
-      </ProForm.Group>
+                      return [];
+                    }}
+                    debounceTime={400}
+                    label="关联家庭"
+                    name="familyId"
+                    rules={[{ required: true, message: '关联家庭必选' }]}
+                    showSearch
+                  />
+                ) : (
+                  <ProFormText
+                    label="家庭名称"
+                    name="familyName"
+                    colProps={{ span: 12 }}
+                    placeholder="请输入家庭名称"
+                    rules={[{ required: true, message: '家庭名称必填' }]}
+                  />
+                )
+              ) : null;
+            }}
+          </ProFormDependency>
+        </ProForm.Group>
+      )}
     </ModalForm>
   );
 };
