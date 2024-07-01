@@ -7,6 +7,7 @@ import CheckConsumeRecord from './components/checkConsumeRecord';
 import CreateOrEdit from './components/createOrEdit';
 import ExtraCost from './components/extraCost';
 import RelateFamily from './components/relateFamily';
+import Surplus from './components/surplus';
 import { useInitColumns } from './field';
 import { TableListItemProps } from './interface';
 import { deleteStudent, exportStudent, getStudentList } from './services';
@@ -30,6 +31,9 @@ const StudentList: React.FC = () => {
   // 查看消费记录
   const [consumeVis, setConsumeVis] = useState(false);
 
+  // 查看剩余课销
+  const [surplusVis, setSurplusVis] = useState(false);
+
   const columns = useInitColumns(
     (data: TableListItemProps) => {
       setVisible(true);
@@ -51,6 +55,10 @@ const StudentList: React.FC = () => {
     },
     (data: TableListItemProps) => {
       setConsumeVis(true);
+      setData(data);
+    },
+    (data: TableListItemProps) => {
+      setSurplusVis(true);
       setData(data);
     },
   );
@@ -217,6 +225,11 @@ const StudentList: React.FC = () => {
           type="student"
           onCancel={() => setConsumeVis(false)}
         />
+      )}
+
+      {/* 查看剩余课销 */}
+      {surplusVis && (
+        <Surplus visible={surplusVis} data={data} onCancel={() => setSurplusVis(false)} />
       )}
     </div>
   );

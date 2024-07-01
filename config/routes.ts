@@ -65,6 +65,11 @@ export default [
         path: '/course/courseList',
         component: './Course/CourseList',
       },
+      // {
+      //   name: '课程课销',
+      //   path: '/course/courseRemainConsume',
+      //   component: './Course/CourseRemainConsume',
+      // },
     ],
   },
   {

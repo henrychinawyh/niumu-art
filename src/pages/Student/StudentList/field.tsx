@@ -13,6 +13,7 @@ export const useInitColumns: any = (
   deleteFn?: (data: TableListItemProps) => void,
   relateFamilyFn?: (data: TableListItemProps) => void,
   consumeRecordFn?: (data: TableListItemProps) => void,
+  surplusFn?: (data: TableListItemProps) => void,
 ) => {
   const [options, setOptions] = useState([]);
 
@@ -184,6 +185,15 @@ export const useInitColumns: any = (
                 }}
               >
                 消费记录
+              </Button>
+              <Button
+                type="link"
+                size="small"
+                onClick={() => {
+                  surplusFn?.(record);
+                }}
+              >
+                剩余课销
               </Button>
             </div>
           </Space>

@@ -103,3 +103,14 @@ export async function queryFamilyConsumeRecord(params: any) {
     data: params,
   });
 }
+
+// 查询学员剩余课销
+export async function querySurplus(params: any) {
+  return request(`${stuPrefix}/getSurplus`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: params,
+  });
+}
