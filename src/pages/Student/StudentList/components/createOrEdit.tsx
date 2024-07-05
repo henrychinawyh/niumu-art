@@ -68,9 +68,6 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         hasCousin: data?.hasCousin ? data.hasCousin?.split(',') : [],
       }}
       onFinish={async (values) => {
-        // relateWay familyId familyName
-        console.log(values, 'values');
-
         const params: FormSubmitProps = {
           ...values,
           idCard: values.idCard?.toUpperCase(),

@@ -122,8 +122,6 @@ const CourseList: React.FC = () => {
     });
     message.success(res?.message || '删除成功');
     if (res?.data) {
-      console.log(expandData, courseId, gradeId);
-
       setExpandData((prev: any) => {
         prev[courseId].list = prev[courseId].list.filter((item: any) => item.value !== gradeId);
         prev[courseId].total -= 1;

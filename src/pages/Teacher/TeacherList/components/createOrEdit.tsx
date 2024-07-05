@@ -51,7 +51,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       form={form}
       initialValues={{
         ...data,
-        sex: data?.sex || 1,
+        sex: data?.sex ? `${data?.sex}` : undefined,
         birthDate: data?.birthDate ? getDateString(data?.birthDate) : undefined,
       }}
       onFinish={async (values) => {
@@ -139,6 +139,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         colProps={{ span: 12 }}
         options={convertObjectToArray(GENDER)}
         radioType="button"
+        rules={[{ required: true, message: '性别必选' }]}
       />
 
       <ProFormText

@@ -12,6 +12,10 @@ export const useInitColumns: any = () => {
       title: '课程级别',
       dataIndex: 'gradeName',
     },
+    {
+      title: '剩余课销',
+      dataIndex: 'remainConsume',
+    },
   ];
 
   return columns;

@@ -48,6 +48,9 @@ const SwitchClass: React.FC<IProps> = (props) => {
   // 转班操作
   const onOk = async (data: any) => {
     setLoading(true);
+
+    console.log(data, 'data');
+
     const res = await changeClass(data);
     setLoading(false);
     if (res.data) {

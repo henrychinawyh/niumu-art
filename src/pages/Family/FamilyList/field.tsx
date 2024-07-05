@@ -45,11 +45,6 @@ export const useInitColumns: any = (
       },
     },
     {
-      title: '最近一次消费时间',
-      dataIndex: 'lastCostTime',
-      hideInSearch: true,
-    },
-    {
       title: '操作',
       dataIndex: 'opt',
       hideInSearch: true,

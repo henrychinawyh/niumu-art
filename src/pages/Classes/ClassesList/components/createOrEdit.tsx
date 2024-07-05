@@ -94,7 +94,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
         name: data?.className,
         subject:
           data?.courseId && data?.gradeId
-            ? [data?.courseId, data?.gradeId, data?.courseSemester]
+            ? [data?.courseId, data?.courseSemester, data?.gradeId]
             : [],
         teacherId: data?.teacherId,
         studentIds: data?.studentList?.map((item) => item.studentId) || [],

@@ -83,7 +83,7 @@ const Charge: React.FC<IProps> = (props) => {
           name="discount"
           colProps={{ span: 12 }}
           min={0}
-          max={1}
+          max={0.99}
           rules={[{ required: true, message: '请输入会员折扣' }]}
           fieldProps={{ precision: 2 }}
         />

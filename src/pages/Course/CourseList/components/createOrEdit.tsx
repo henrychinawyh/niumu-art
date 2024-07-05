@@ -43,8 +43,6 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
       autoFocusFirstInput
       form={form}
       onFinish={async (values) => {
-        console.log(values);
-
         if (type === 'create' && !values?.grades?.length) {
           message.error('请至少添加一个级别');
           return false;

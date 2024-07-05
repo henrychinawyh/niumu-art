@@ -110,8 +110,6 @@ const useInitColumns = (reloadTable: () => void) => {
             onCell: (record) => {
               return {
                 onDoubleClick: () => {
-                  console.log(record?.accountBalance, record?.realPrice);
-
                   if (+record?.accountBalance < +record?.realPrice) {
                     message.error('账户余额不足，不能销课，请充值');
                     return;
