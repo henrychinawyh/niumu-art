@@ -205,6 +205,7 @@ const CreateOrEdit: React.FC<IProps> = (props) => {
             name="relateWay"
             options={convertObjectToArray(RELATE_WAY)}
             colProps={{ span: 12 }}
+            rules={[{ required: true, message: '选择关联方式' }]}
           />
 
           <ProFormDependency name={['relateWay']}>

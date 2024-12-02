@@ -212,6 +212,11 @@ const Detail: React.FC<IProps> = (props) => {
 
   // 添加学员
   const addStudent = async (studentIds: number[]) => {
+    if (studentIds?.length === 0) {
+      message.error('请选择学员');
+      return;
+    }
+
     const tempArr = intersection(
       dataSource?.map((item) => item.studentId),
       studentIds,
@@ -409,7 +414,7 @@ const Detail: React.FC<IProps> = (props) => {
           open={addStuVis}
           onCancel={() => setAddStuVis(false)}
           onOk={addStudent}
-          width={300}
+          width={500}
         />
       )}
     </Modal>

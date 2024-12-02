@@ -25,24 +25,34 @@ const QueryStudentModal: React.FC<IProps> = (props) => {
 
   // 搜索学员
   const onSearch = async (value: any) => {
-    const res = await getStudent({ stuName: value });
-    if (res?.code === '000') {
-      setOptions(convertArrayToOptions(res?.data, 'id', 'stuName'));
+    if (value) {
+      const res = await getStudent({ stuName: value });
+      if (res?.code === '000') {
+        setOptions(convertArrayToOptions(res?.data, 'id', 'stuName'));
+      }
     }
   };
 
   const debounceSearch = debounce(onSearch, debounceTime);
 
+  console.log(modalProps.width, 'modalProps.width');
+
   return (
     <Modal
+      styles={{
+        body: {
+          padding: 12,
+        },
+      }}
       title={title}
       {...modalProps}
       onOk={() => {
         onOk(value);
       }}
+      width={modalProps.width || 500}
     >
       <Row>
-        <Col span={24}>
+        <Col span={16}>
           <AsyncSelect
             placeholder="请输入学员姓名"
             style={{ width: '100%' }}
