@@ -45,6 +45,11 @@ export const errorConfig: RequestConfig = {
         return;
       }
 
+      if (error?.response?.status === 401) {
+        message.error(error?.response?.data?.message);
+        return;
+      }
+
       if (opts?.skipErrorHandler) throw error;
       // 我们的 errorThrower 抛出的错误。
       if (error.name === 'BizError') {

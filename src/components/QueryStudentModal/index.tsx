@@ -35,8 +35,6 @@ const QueryStudentModal: React.FC<IProps> = (props) => {
 
   const debounceSearch = debounce(onSearch, debounceTime);
 
-  console.log(modalProps.width, 'modalProps.width');
-
   return (
     <Modal
       styles={{
