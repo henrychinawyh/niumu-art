@@ -90,11 +90,23 @@ export default [
     ],
   },
   {
+    path: '/chat',
+    name: '聊天管理',
+    routes: [
+      {
+        name: '机器人',
+        path: '/chat/chatGpt',
+        component: './Chat/Chat',
+      },
+    ],
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
     component: './Welcome',
   },
+
   {
     path: '/',
     redirect: '/welcome',
